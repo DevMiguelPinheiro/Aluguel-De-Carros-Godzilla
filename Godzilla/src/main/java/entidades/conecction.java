@@ -10,11 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 /**
  *
- * @author migue
+ * @author miguel pinheiro
  */
 public class conecction {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/tutorial";
+    private static final String URL = "jdbc:mysql://localhost:3306/godzillamodelo";
     private static final String USER = "root";
     private static final String PASS = "admin";
     private static final String DRIVER = "com.mysql.jdbc.Driver";
