@@ -14,9 +14,9 @@ import java.sql.SQLException;
  */
 public class conecction {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/godzillamodelo";
+    private static final String URL = "jdbc:mysql://localhost:3307/mydb";
     private static final String USER = "root";
-    private static final String PASS = "admin";
+    private static final String PASS = "1234";
     private static final String DRIVER = "com.mysql.jdbc.Driver";
 
     public static Connection getConnection() {
