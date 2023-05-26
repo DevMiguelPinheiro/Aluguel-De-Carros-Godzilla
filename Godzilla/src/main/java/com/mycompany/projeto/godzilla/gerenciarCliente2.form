@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -41,22 +41,22 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="PLACA" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                      <Component id="cpf" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="MARCA1" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                      <Component id="nome" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="CHASSI" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                      <Component id="end" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="VALOR" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                      <Component id="fone" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="16" max="32767" attributes="0"/>
@@ -101,10 +101,10 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="CHASSI" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="PLACA" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="MARCA1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="VALOR" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="end" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cpf" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="nome" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="fone" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -129,13 +129,13 @@
             <Property name="text" type="java.lang.String" value="Gerenciar Cliente"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="CHASSI">
+        <Component class="javax.swing.JTextField" name="end">
         </Component>
-        <Component class="javax.swing.JTextField" name="PLACA">
+        <Component class="javax.swing.JTextField" name="cpf">
         </Component>
-        <Component class="javax.swing.JTextField" name="MARCA1">
+        <Component class="javax.swing.JTextField" name="nome">
         </Component>
-        <Component class="javax.swing.JTextField" name="VALOR">
+        <Component class="javax.swing.JTextField" name="fone">
         </Component>
         <Component class="javax.swing.JButton" name="ADICIONAR2">
           <Properties>
@@ -156,6 +156,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="LIMPAR CAMPOS"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LIMPAR2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>

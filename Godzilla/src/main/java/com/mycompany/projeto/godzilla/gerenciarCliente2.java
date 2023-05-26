@@ -28,10 +28,10 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
 
         jPanel3 = new javax.swing.JPanel();
         GERENCIAR2 = new javax.swing.JLabel();
-        CHASSI = new javax.swing.JTextField();
-        PLACA = new javax.swing.JTextField();
-        MARCA1 = new javax.swing.JTextField();
-        VALOR = new javax.swing.JTextField();
+        end = new javax.swing.JTextField();
+        cpf = new javax.swing.JTextField();
+        nome = new javax.swing.JTextField();
+        fone = new javax.swing.JTextField();
         ADICIONAR2 = new javax.swing.JButton();
         EXCLUIR2 = new javax.swing.JButton();
         EDITAR2 = new javax.swing.JButton();
@@ -55,6 +55,11 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         EDITAR2.setText("EDITAR");
 
         LIMPAR2.setText("LIMPAR CAMPOS");
+        LIMPAR2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIMPAR2ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("CPF");
 
@@ -81,19 +86,19 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PLACA, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
                 .addGap(61, 61, 61)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(MARCA1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nome, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
                 .addGap(60, 60, 60)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CHASSI, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(end, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addGap(60, 60, 60)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(VALOR, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fone, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -129,10 +134,10 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
                     .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CHASSI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PLACA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MARCA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(VALOR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(end, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EXCLUIR2)
@@ -157,6 +162,14 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void LIMPAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPAR2ActionPerformed
+    cpf.setText("");
+    fone.setText("");  
+    end.setText("");  
+    nome.setText("");  
+ 
+    }//GEN-LAST:event_LIMPAR2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,53 +205,21 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ADICIONAR;
-    private javax.swing.JButton ADICIONAR1;
     private javax.swing.JButton ADICIONAR2;
-    private javax.swing.JTextField CHASSI;
-    private javax.swing.JTextField CPF;
-    private javax.swing.JTextField CPF1;
-    private javax.swing.JButton EDITAR;
-    private javax.swing.JButton EDITAR1;
     private javax.swing.JButton EDITAR2;
-    private javax.swing.JTextField END;
-    private javax.swing.JTextField END1;
-    private javax.swing.JButton EXCLUIR;
-    private javax.swing.JButton EXCLUIR1;
     private javax.swing.JButton EXCLUIR2;
-    private javax.swing.JLabel GERENCIAR;
-    private javax.swing.JLabel GERENCIAR1;
     private javax.swing.JLabel GERENCIAR2;
-    private javax.swing.JButton LIMPAR;
-    private javax.swing.JButton LIMPAR1;
     private javax.swing.JButton LIMPAR2;
-    private javax.swing.JTextField MARCA1;
-    private javax.swing.JTextField NOME;
-    private javax.swing.JTextField NOME1;
-    private javax.swing.JTextField PLACA;
-    private javax.swing.JTextField TELEFONE;
-    private javax.swing.JTextField TELEFONE1;
-    private javax.swing.JTextField VALOR;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField cpf;
+    private javax.swing.JTextField end;
+    private javax.swing.JTextField fone;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
+    private javax.swing.JTextField nome;
     // End of variables declaration//GEN-END:variables
 }
