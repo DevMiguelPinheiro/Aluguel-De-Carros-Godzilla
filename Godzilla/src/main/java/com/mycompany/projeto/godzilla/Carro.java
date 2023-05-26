@@ -14,4 +14,9 @@ public class Carro {
     public char status;
     public double preco;
     public char imagem;
+    
+    
+    
+
+    
 }
