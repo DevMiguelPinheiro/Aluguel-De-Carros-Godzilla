@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package entidades;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 /**
  *
  * @author miguel pinheiro
@@ -21,6 +21,7 @@ public class conecction {
 
     public static Connection getConnection() {
         try {
+            Statement st;
             Class.forName(DRIVER);
             return DriverManager.getConnection(URL, USER, PASS);
         } catch (ClassNotFoundException | SQLException e) {
@@ -38,11 +39,11 @@ public class conecction {
         }
     }
 
-    public static void closeConnection(Connection con, PreparedStatement stmt) {
+    public static void closeConnection(Connection con, PreparedStatement st) {
         closeConnection(con);
         try {
-            if (stmt != null) {
-                stmt.close();
+            if (st != null) {
+                st.close();
             }
 
         } catch (SQLException e) {
@@ -50,8 +51,8 @@ public class conecction {
         }
     }
 
-    public static void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
-        closeConnection(con, stmt);
+    public static void closeConnection(Connection con, PreparedStatement st, ResultSet rs) {
+        closeConnection(con, st);
         try {
             if (rs != null) {
                 rs.close();

@@ -30,7 +30,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
         GERENCIAR = new javax.swing.JLabel();
         CHASSI = new javax.swing.JTextField();
         PLACA = new javax.swing.JTextField();
-        MARCA1 = new javax.swing.JTextField();
+        MARCA = new javax.swing.JTextField();
         VALOR = new javax.swing.JTextField();
         ADICIONAR = new javax.swing.JButton();
         EXCLUIR = new javax.swing.JButton();
@@ -57,6 +57,11 @@ public class gerenciarCarro extends javax.swing.JFrame {
         EDITAR.setText("EDITAR");
 
         LIMPAR.setText("LIMPAR CAMPOS");
+        LIMPAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIMPARActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("PLACA");
 
@@ -107,7 +112,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
                                     .addComponent(jLabel1))
                                 .addGap(61, 61, 61)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(MARCA1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(MARCA, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2))
                                 .addGap(60, 60, 60)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,7 +143,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CHASSI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(PLACA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MARCA1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MARCA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(VALOR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(STATUS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -167,6 +172,14 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void LIMPARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPARActionPerformed
+    PLACA.setText("");
+    VALOR.setText("");  
+    CHASSI.setText("");  
+    STATUS.setText("");  
+    MARCA.setText("");  
+    }//GEN-LAST:event_LIMPARActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,7 +223,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private javax.swing.JButton EXCLUIR;
     private javax.swing.JLabel GERENCIAR;
     private javax.swing.JButton LIMPAR;
-    private javax.swing.JTextField MARCA1;
+    private javax.swing.JTextField MARCA;
     private javax.swing.JTextField PLACA;
     private javax.swing.JTextField STATUS;
     private javax.swing.JTextField VALOR;
