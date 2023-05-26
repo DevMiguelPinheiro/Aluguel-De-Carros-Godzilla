@@ -4,6 +4,9 @@
  */
 package com.mycompany.projeto.godzilla;
 
+import data.Carros;
+import java.util.Set;
+
 /**
  *
  * @author migue
@@ -51,6 +54,11 @@ public class gerenciarCarro extends javax.swing.JFrame {
         GERENCIAR.setText("Gerenciar Carros");
 
         ADICIONAR.setText("ADICIONAR");
+        ADICIONAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ADICIONARActionPerformed(evt);
+            }
+        });
 
         EXCLUIR.setText("EXCLUIR");
 
@@ -180,6 +188,17 @@ public class gerenciarCarro extends javax.swing.JFrame {
     STATUS.setText("");  
     MARCA.setText("");  
     }//GEN-LAST:event_LIMPARActionPerformed
+
+    private void ADICIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONARActionPerformed
+    Carros carros = new Carros();
+    carros.setPlaca(PLACA.getText());
+    carros.setStatus(STATUS.getText());
+    carros.setPreco(Double.parseDouble(VALOR.getText()));
+    carros.setMarca(MARCA.getText());
+    carros.setChassi(CHASSI.getText());
+        
+        
+    }//GEN-LAST:event_ADICIONARActionPerformed
 
     /**
      * @param args the command line arguments

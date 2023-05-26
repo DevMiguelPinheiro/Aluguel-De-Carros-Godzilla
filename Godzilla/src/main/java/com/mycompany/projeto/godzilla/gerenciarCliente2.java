@@ -4,6 +4,8 @@
  */
 package com.mycompany.projeto.godzilla;
 
+import data.Cliente;
+
 /**
  *
  * @author migue
@@ -49,6 +51,11 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         GERENCIAR2.setText("Gerenciar Cliente");
 
         ADICIONAR2.setText("ADICIONAR");
+        ADICIONAR2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ADICIONAR2ActionPerformed(evt);
+            }
+        });
 
         EXCLUIR2.setText("EXCLUIR");
 
@@ -170,6 +177,15 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     nome.setText("");  
  
     }//GEN-LAST:event_LIMPAR2ActionPerformed
+
+    private void ADICIONAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONAR2ActionPerformed
+    Cliente cliente = new Cliente();
+    cliente.setCpf(Integer.parseInt(cpf.getText()));
+    cliente.setEndereco(end.getText());
+    cliente.setTelefone(fone.getText());
+    cliente.setNome(nome.getText());
+
+    }//GEN-LAST:event_ADICIONAR2ActionPerformed
 
     /**
      * @param args the command line arguments
