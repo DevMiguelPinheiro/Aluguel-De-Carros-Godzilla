@@ -5,7 +5,9 @@
 package com.mycompany.projeto.godzilla;
 
 import data.Carros;
-import java.util.Set;
+import data.CarrosDao;
+
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -191,13 +193,31 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
     private void ADICIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONARActionPerformed
     Carros carros = new Carros();
+    CarrosDao dao;
+    boolean sts;
     carros.setPlaca(PLACA.getText());
     carros.setStatus(STATUS.getText());
     carros.setPreco(Double.parseDouble(VALOR.getText()));
     carros.setMarca(MARCA.getText());
+    carros.setImagem("");
     carros.setChassi(CHASSI.getText());
         
+    dao = new CarrosDao();
+    sts = dao.conectar();  
+    
+    if(sts == false){
+    
+        JOptionPane.showMessageDialog(null,"Erro na conexão com o banco de dados");
+    }else{
+        sts = dao.salvar(carros);
+        if(sts == false){
+            JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados dos usuário");
+        }else{
+            JOptionPane.showMessageDialog(null, "Dados inseridos com SUCESSO!");
         
+        }
+        dao.dc();
+    }
     }//GEN-LAST:event_ADICIONARActionPerformed
 
     /**
