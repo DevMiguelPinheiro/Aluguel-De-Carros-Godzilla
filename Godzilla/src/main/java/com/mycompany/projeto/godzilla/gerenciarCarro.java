@@ -4,10 +4,21 @@
  */
 package com.mycompany.projeto.godzilla;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.intellijthemes.FlatDarkFlatIJTheme;
+import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 import data.Carros;
 import data.CarrosDao;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,6 +31,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
      */
     public gerenciarCarro() {
         initComponents();
+        
     }
 
     /**
@@ -48,9 +60,11 @@ public class gerenciarCarro extends javax.swing.JFrame {
         STATUS = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabela = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setForeground(new java.awt.Color(0, 0, 0));
 
         GERENCIAR.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
         GERENCIAR.setText("Gerenciar Carros");
@@ -83,7 +97,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
         jLabel5.setText("STATUS");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null}
             },
@@ -91,7 +105,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
                 "PLACA", "MARCA", "CHASSI", "VALOR", "STATUS"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabela);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -219,40 +233,34 @@ public class gerenciarCarro extends javax.swing.JFrame {
         dao.dc();
     }
     }//GEN-LAST:event_ADICIONARActionPerformed
+    
+    /**
+     *
+     * @param model
+     */
+    public void preencher(DefaultTableModel model) {
+    model.setNumRows(0);
+    exibirDados(model);
+}
+
+
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+    UIManager.setLookAndFeel( new FlatDarkPurpleIJTheme());
+    } catch( Exception ex ) {
+    System.err.println( "Failed to initialize LaF" );
+}
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new gerenciarCarro().setVisible(true);
             }
         });
+    
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -273,6 +281,10 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabela;
     // End of variables declaration//GEN-END:variables
+
+    private void exibirDados(DefaultTableModel model) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

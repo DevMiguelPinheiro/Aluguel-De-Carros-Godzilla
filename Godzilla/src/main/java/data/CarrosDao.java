@@ -10,8 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import data.Carros; 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
 /**
  * data class object usado para acessar / interagir com o sql a partir de uma classe
  * @author migue
@@ -37,7 +40,7 @@ public class CarrosDao {
     }
     
 
-    
+
     public boolean salvar(Carros carros) {
         
         try {
@@ -57,8 +60,32 @@ public class CarrosDao {
             dc();
         }
 
-
     }
+    public void exibirDados(DefaultTableModel model) {
+    String query = "SELECT * FROM carros";
+
+    try (Statement stmt = con.createStatement();
+         ResultSet rs = stmt.executeQuery(query)) {
+
+        ResultSetMetaData metaData = rs.getMetaData();
+        int colunas = metaData.getColumnCount();
+
+        for (int coluna = 1; coluna <= colunas; coluna++) {
+            model.addColumn(metaData.getColumnName(coluna));
+        }
+
+        while (rs.next()) {
+            Object[] rowData = new Object[colunas];
+            for (int coluna = 1; coluna <= colunas; coluna++) {
+                rowData[coluna - 1] = rs.getObject(coluna);
+            }
+            model.addRow(rowData);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
     
     public void dc(){
     try {
