@@ -6,14 +6,10 @@ package data;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import data.Carros; 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 /**
  * data class object usado para acessar / interagir com o sql a partir de uma classe
@@ -21,7 +17,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CarrosDao {
     private Connection con;
-    private PreparedStatement st;
+    private PreparedStatement ps;
+    private ResultSet rs;
+    
 
     public CarrosDao() {
     }
@@ -45,52 +43,71 @@ public class CarrosDao {
         
         try {
         String sql = "INSERT INTO carros (placa, marca, status, preco, Chassi) VALUES (?, ?, ?, ?, ?)";
-        st = con.prepareStatement(sql);
-        st.setString(1, carros.getPlaca());
-        st.setString(2, carros.getMarca());
-        st.setString(3, carros.getStatus());
-        st.setDouble(4, carros.getPreco());
-        st.setString(5, carros.getChassi());
-        st.executeUpdate();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, carros.getPlaca());
+        ps.setString(2, carros.getMarca());
+        ps.setString(3, carros.getStatus());
+        ps.setDouble(4, carros.getPreco());
+        ps.setString(5, carros.getChassi());
+        ps.executeUpdate();
         return true;
         }catch (SQLException ex) {
             ex.printStackTrace();
             return false;
-        } finally {
-            dc();
-        }
-
+        } 
     }
-    public void exibirDados(DefaultTableModel model) {
-    String query = "SELECT * FROM carros";
+    
+    public void atualizarTabela(DefaultTableModel model) throws SQLException {
+         String query = "SELECT * FROM carros";
+    try {
+        ps = con.prepareStatement(query);
+        rs = ps.executeQuery();
 
-    try (Statement stmt = con.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
-
-        ResultSetMetaData metaData = rs.getMetaData();
-        int colunas = metaData.getColumnCount();
-
-        for (int coluna = 1; coluna <= colunas; coluna++) {
-            model.addColumn(metaData.getColumnName(coluna));
-        }
+        model.setRowCount(0); // Limpar os dados existentes na tabela
 
         while (rs.next()) {
-            Object[] rowData = new Object[colunas];
-            for (int coluna = 1; coluna <= colunas; coluna++) {
-                rowData[coluna - 1] = rs.getObject(coluna);
-            }
+            Object[] rowData = new Object[6]; // Adicionei mais um elemento para o array
+
+            // Preencher o array rowData com os dados do ResultSet
+            rowData[0] = rs.getString("placa");
+            rowData[1] = rs.getString("marca");
+            rowData[2] = rs.getString("status");
+            rowData[3] = rs.getDouble("preco");
+            rowData[4] = rs.getString("chassi");
+            rowData[5] = rs.getString("img");
+
             model.addRow(rowData);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-}
 
+        rs.close();
+    } finally {
+        if (ps != null) {
+            ps.close();
+        }
+    }
+        
+    }   
+
+    public boolean excluirCarro(String placa) {
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod", "root", "1234");
+            String query = "DELETE FROM carros WHERE PLACA = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, placa);
+            int rowsAffected = ps.executeUpdate();
+            ps.close();
+            con.close();
+            return rowsAffected > 0; // Retorna true se pelo menos uma linha foi afetada (excluída)
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
     
     public void dc(){
     try {
-            if (st != null) {
-                st.close();
+            if (ps != null) {
+                ps.close();
             }
             if (con != null) {
                 con.close();
