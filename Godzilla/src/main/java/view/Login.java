@@ -47,9 +47,11 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setBackground(new java.awt.Color(221, 221, 221));
         jLabel2.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
         jLabel2.setText("USUÁRIO");
 
+        jLabel3.setBackground(new java.awt.Color(221, 221, 221));
         jLabel3.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         jLabel3.setText("SENHA");
 

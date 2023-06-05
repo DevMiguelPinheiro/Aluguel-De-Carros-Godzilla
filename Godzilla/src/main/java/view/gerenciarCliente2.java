@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.projeto.godzilla;
+package view;
 
 import data.Cliente;
 
@@ -168,6 +168,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void LIMPAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPAR2ActionPerformed
