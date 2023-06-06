@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.projeto.godzilla;
+package view;
 
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
@@ -10,6 +10,10 @@ import java.sql.ResultSetMetaData;
 import data.Carros;
 import control.CarrosDao;
 import java.awt.HeadlessException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
@@ -18,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JFileChooser;
 
 
 /**
@@ -32,11 +37,10 @@ public class gerenciarCarro extends javax.swing.JFrame {
     public gerenciarCarro() {
         initComponents();
         exibirDados();
-
-
-        
-        
+    
     }
+    
+    
 
     private Connection con;
     private Statement st;
@@ -51,7 +55,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         GERENCIAR = new javax.swing.JLabel();
-        CHASSI = new javax.swing.JTextField();
+        MODELO = new javax.swing.JTextField();
         PLACA = new javax.swing.JTextField();
         MARCA = new javax.swing.JTextField();
         VALOR = new javax.swing.JTextField();
@@ -67,6 +71,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
         tabelacarros = new javax.swing.JTable();
         LIMPAR1 = new javax.swing.JButton();
         cbstatus = new javax.swing.JComboBox<>();
+        SELECIONAR = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aluguel de carros ");
@@ -77,9 +82,9 @@ public class gerenciarCarro extends javax.swing.JFrame {
         GERENCIAR.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
         GERENCIAR.setText("Gerenciar Carros");
 
-        CHASSI.addActionListener(new java.awt.event.ActionListener() {
+        MODELO.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CHASSIActionPerformed(evt);
+                MODELOActionPerformed(evt);
             }
         });
 
@@ -103,7 +108,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
         jLabel2.setText("MARCA");
 
-        jLabel3.setText("CHASSI");
+        jLabel3.setText("MODELO");
 
         jLabel4.setText("R$");
 
@@ -140,6 +145,13 @@ public class gerenciarCarro extends javax.swing.JFrame {
             }
         });
 
+        SELECIONAR.setText("SELECIONAR IMAGEM");
+        SELECIONAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SELECIONARActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -155,11 +167,11 @@ public class gerenciarCarro extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(MARCA, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
-                        .addGap(37, 37, 37)
+                        .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(CHASSI, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MODELO, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
-                        .addGap(57, 57, 57)
+                        .addGap(68, 68, 68)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(VALOR, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -167,9 +179,6 @@ public class gerenciarCarro extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(cbstatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(107, 107, 107)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -181,8 +190,14 @@ public class gerenciarCarro extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(EXCLUIR, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LIMPAR1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                        .addComponent(LIMPAR1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(296, 296, 296)
+                        .addComponent(SELECIONAR, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,16 +217,18 @@ public class gerenciarCarro extends javax.swing.JFrame {
                     .addComponent(VALOR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbstatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MARCA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CHASSI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                    .addComponent(MODELO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(SELECIONAR)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EXCLUIR)
                     .addComponent(ADICIONAR)
                     .addComponent(EDITAR)
                     .addComponent(LIMPAR1))
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42))
+                .addGap(51, 51, 51))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -219,8 +236,8 @@ public class gerenciarCarro extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 794, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 9, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,7 +255,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private void LIMPAR1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPAR1ActionPerformed
         PLACA.setText("");
         VALOR.setText("");
-        CHASSI.setText("");
+        MODELO.setText("");
         MARCA.setText("");
     }//GEN-LAST:event_LIMPAR1ActionPerformed
 
@@ -281,43 +298,46 @@ public class gerenciarCarro extends javax.swing.JFrame {
     }//GEN-LAST:event_EXCLUIRActionPerformed
 
     private void ADICIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONARActionPerformed
-        Carros carros = new Carros();
-        CarrosDao dao;
-        boolean sts;
-        carros.setPlaca(PLACA.getText());
-        String statusSelecionado = (String) cbstatus.getSelectedItem();
-        carros.setStatus(statusSelecionado);
-        carros.setPreco(Double.parseDouble(VALOR.getText()));
-        carros.setMarca(MARCA.getText());
-        carros.setImagem("");
-        carros.setChassi(CHASSI.getText());
+    Carros carros = new Carros();
+    CarrosDao dao;
+    boolean sts;
+    carros.setPlaca(PLACA.getText());
+    String statusSelecionado = (String) cbstatus.getSelectedItem();
+    carros.setStatus(statusSelecionado);
+    carros.setPreco(Double.parseDouble(VALOR.getText()));
+    carros.setMarca(MARCA.getText());
+    carros.setImagem(caminhoImagem); // Define o caminho da imagem no objeto carros
+    carros.setModelo(MODELO.getText());
 
-        dao = new CarrosDao();
+    dao = new CarrosDao();
 
-        try {
-            if (!dao.conectar()) {
-                JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
+    try {
+        if (!dao.conectar()) {
+            JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
+        } else {
+            if (dao.salvar(carros)) {
+                JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
             } else {
-                if (dao.salvar(carros)) {
-                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
-                }
-
-                dao.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
-                tabelacarros.revalidate();
-                tabelacarros.repaint();
+                JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao atualizar a tabela de carros");
-        }
 
+            dao.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
+            tabelacarros.revalidate();
+            tabelacarros.repaint();
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Erro ao atualizar a tabela de carros");
+    }
     }//GEN-LAST:event_ADICIONARActionPerformed
 
-    private void CHASSIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CHASSIActionPerformed
+    private void MODELOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MODELOActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_CHASSIActionPerformed
+    }//GEN-LAST:event_MODELOActionPerformed
+
+    private void SELECIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SELECIONARActionPerformed
+        selecionarImagem();
+    }//GEN-LAST:event_SELECIONARActionPerformed
     
     public void exibirDados() {
     try {
@@ -355,7 +375,35 @@ public class gerenciarCarro extends javax.swing.JFrame {
     return model;
 }
 
+    // selecionar imagem
+    // Variável para armazenar o caminho da imagem selecionada
+    private String caminhoImagem = "";
 
+    private void selecionarImagem() {
+    JFileChooser fileChooser = new JFileChooser();
+    int resultado = fileChooser.showOpenDialog(this);
+
+    if (resultado == JFileChooser.APPROVE_OPTION) {
+        File arquivoSelecionado = fileChooser.getSelectedFile();
+        String nomeArquivo = arquivoSelecionado.getName();
+
+        // Defina o diretório de destino
+        String diretorioDestino = "images/";
+
+        // Copie o arquivo para o diretório de destino
+        try {
+            Files.copy(arquivoSelecionado.toPath(), new File(diretorioDestino + nomeArquivo).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Arquivo copiado com sucesso para " + diretorioDestino + nomeArquivo);
+            
+            // Armazena o caminho da imagem selecionada na variável
+            caminhoImagem = diretorioDestino + nomeArquivo;
+        } catch (IOException e) {
+            System.out.println("Erro ao copiar o arquivo: " + e.getMessage());
+        }
+    }
+}
+    
+    // init componentes metodo
 
     public static void main(String args[]) {
         try {
@@ -374,13 +422,14 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ADICIONAR;
-    private javax.swing.JTextField CHASSI;
     private javax.swing.JButton EDITAR;
     private javax.swing.JButton EXCLUIR;
     private javax.swing.JLabel GERENCIAR;
     private javax.swing.JButton LIMPAR1;
     private javax.swing.JTextField MARCA;
+    private javax.swing.JTextField MODELO;
     private javax.swing.JTextField PLACA;
+    private javax.swing.JButton SELECIONAR;
     private javax.swing.JTextField VALOR;
     private javax.swing.JComboBox<String> cbstatus;
     private javax.swing.JLabel jLabel1;

@@ -2,26 +2,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package control;
+package model;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
+import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import java.sql.ResultSetMetaData;
+import java.awt.HeadlessException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
-import java.sql.PreparedStatement; 
-import data.Carros;
-import java.sql.ResultSet;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFileChooser;
 /**
  * data class object usado para acessar / interagir com o sql a partir de uma classe
  * @author migue
  */
-public class CarrosDao {
+public class ClientesDao {
     private Connection con;
     private PreparedStatement ps;
     private ResultSet rs;
     
 
-    public CarrosDao() {
+    public ClientesDao() {
     }
     
     
@@ -39,16 +50,16 @@ public class CarrosDao {
     
 
 
-    public boolean salvar(Carros carros) {
+    public boolean salvar(Cliente clientes) {
         
         try {
-        String sql = "INSERT INTO carros (placa, marca, modelo,status,preco) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO clientes (id, nome, endereco,telefone) VALUES (?, ?, ?, ?)";
         ps = con.prepareStatement(sql);
-        ps.setString(1, carros.getPlaca());
-        ps.setString(2, carros.getMarca());
-        ps.setString(3, carros.getModelo());
-        ps.setString(4, carros.getStatus());
-        ps.setDouble(5, carros.getPreco());
+        ps.setInt(1, clientes.getId());
+        ps.setString(2, clientes.getNome());
+        ps.setString(3, clientes.getEndereco());
+        ps.setString(4, clientes.getTelefone());
+        
         
         ps.executeUpdate();
         return true;
@@ -59,7 +70,7 @@ public class CarrosDao {
     }
     
     public void atualizarTabela(DefaultTableModel model) throws SQLException {
-         String query = "SELECT * FROM carros";
+         String query = "SELECT * FROM clientes";
     try {
         ps = con.prepareStatement(query);
         rs = ps.executeQuery();
@@ -70,13 +81,10 @@ public class CarrosDao {
             Object[] rowData = new Object[6]; // Adicionei mais um elemento para o array
 
             // Preencher o array rowData com os dados do ResultSet
-            rowData[0] = rs.getString("placa");
-            rowData[1] = rs.getString("marca");
-            rowData[2] = rs.getString("modelo");
-            rowData[3] = rs.getString("status");
-            rowData[4] = rs.getDouble("preco");
-            rowData[5] = rs.getString("img");
-
+            rowData[0] = rs.getString("endereco");
+            rowData[1] = rs.getString("id");
+            rowData[2] = rs.getString("nome");
+            rowData[3] = rs.getString("telefone");
             model.addRow(rowData);
         }
 
@@ -92,7 +100,7 @@ public class CarrosDao {
     public boolean excluirCarro(String placa) {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod", "root", "1234");
-            String query = "DELETE FROM carros WHERE PLACA = ?";
+            String query = "DELETE FROM clientes WHERE ID = ?";
             ps = con.prepareStatement(query);
             ps.setString(1, placa);
             int rowsAffected = ps.executeUpdate();
@@ -120,6 +128,3 @@ public class CarrosDao {
     }
     
     }
-    
-    
-

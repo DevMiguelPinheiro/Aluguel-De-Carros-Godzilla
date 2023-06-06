@@ -25,8 +25,8 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Component id="jPanel1" min="-2" pref="794" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="9" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -63,12 +63,12 @@
                               <Component id="MARCA" min="-2" pref="130" max="-2" attributes="0"/>
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="CHASSI" min="-2" pref="130" max="-2" attributes="0"/>
+                              <Component id="MODELO" min="-2" pref="130" max="-2" attributes="0"/>
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="VALOR" min="-2" pref="130" max="-2" attributes="0"/>
                               <Component id="jLabel4" min="-2" pref="23" max="-2" attributes="0"/>
@@ -78,10 +78,6 @@
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               <Component id="cbstatus" min="-2" max="-2" attributes="0"/>
                           </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="126" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="504" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
@@ -98,8 +94,16 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="LIMPAR1" min="-2" pref="130" max="-2" attributes="0"/>
                       </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
+                          <Component id="jScrollPane1" min="-2" pref="504" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="296" max="-2" attributes="0"/>
+                          <Component id="SELECIONAR" min="-2" pref="185" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="46" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -122,18 +126,20 @@
                       <Component id="VALOR" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cbstatus" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="MARCA" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="CHASSI" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="MODELO" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="65" max="32767" attributes="0"/>
+                  <EmptySpace pref="27" max="32767" attributes="0"/>
+                  <Component id="SELECIONAR" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="EXCLUIR" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="ADICIONAR" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="EDITAR" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="LIMPAR1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="341" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -147,9 +153,9 @@
             <Property name="text" type="java.lang.String" value="Gerenciar Carros"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="CHASSI">
+        <Component class="javax.swing.JTextField" name="MODELO">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CHASSIActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MODELOActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="PLACA">
@@ -191,7 +197,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="CHASSI"/>
+            <Property name="text" type="java.lang.String" value="MODELO"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
@@ -261,6 +267,14 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="SELECIONAR">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="SELECIONAR IMAGEM"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SELECIONARActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

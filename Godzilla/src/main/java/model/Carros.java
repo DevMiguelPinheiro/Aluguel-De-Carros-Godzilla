@@ -11,10 +11,10 @@ package data;
 public class Carros {
     private String placa;
     private String marca;
+    private String modelo;
     private String status;
     private double preco;
     private String imagem;
-    private String chassi;
 
     public Carros() {
     }
@@ -59,11 +59,11 @@ public class Carros {
         this.imagem = imagem;
     }
 
-    public String getChassi() {
-        return chassi;
+    public String getModelo() {
+        return modelo;
     }
 
-    public void setChassi(String chassi) {
-        this.chassi = chassi;
+    public void setModelo(String chassi) {
+        this.modelo = modelo;
     }   
 }

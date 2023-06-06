@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package data;
+package model;
 
 /**
  *
  * @author migue
  */
 public class Cliente {
-    private int cpf;
+    private int id;
     private String nome;
     private String endereco;
     private String telefone;
@@ -22,12 +22,12 @@ public class Cliente {
     
     //getters e setters
 
-    public int getCpf() {
-        return cpf;
+    public int getId() {
+        return id;
     }
 
-    public void setCpf(int cpf) {
-        this.cpf = cpf;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {

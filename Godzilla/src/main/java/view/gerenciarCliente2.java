@@ -4,7 +4,15 @@
  */
 package view;
 
-import data.Cliente;
+import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+import model.Cliente;
+import model.ClientesDao;
+
+
 
 /**
  *
@@ -30,20 +38,20 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
 
         jPanel3 = new javax.swing.JPanel();
         GERENCIAR2 = new javax.swing.JLabel();
-        end = new javax.swing.JTextField();
-        cpf = new javax.swing.JTextField();
-        nome = new javax.swing.JTextField();
-        fone = new javax.swing.JTextField();
+        tfend = new javax.swing.JTextField();
+        tfid = new javax.swing.JTextField();
+        tfnome = new javax.swing.JTextField();
+        tffone = new javax.swing.JTextField();
         ADICIONAR2 = new javax.swing.JButton();
         EXCLUIR2 = new javax.swing.JButton();
         EDITAR2 = new javax.swing.JButton();
         LIMPAR2 = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        txtid = new javax.swing.JLabel();
+        txtnome = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tabelaCliente = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,15 +76,15 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setText("CPF");
+        txtid.setText("ID");
 
-        jLabel10.setText("NOME");
+        txtnome.setText("NOME");
 
         jLabel11.setText("ENDERECO");
 
         jLabel12.setText("TELEFONE");
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null}
             },
@@ -84,7 +92,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
                 "PLACA", "MARCA", "CHASSI", "VALOR", "STATUS"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(tabelaCliente);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -93,19 +101,19 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
+                    .addComponent(tfid, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtid))
                 .addGap(61, 61, 61)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nome, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
+                    .addComponent(tfnome, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtnome))
                 .addGap(60, 60, 60)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(end, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfend, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addGap(60, 60, 60)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fone, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tffone, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -135,16 +143,16 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
                 .addComponent(GERENCIAR2)
                 .addGap(36, 36, 36)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10)
+                    .addComponent(txtid)
+                    .addComponent(txtnome)
                     .addComponent(jLabel11)
                     .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(end, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfend, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfnome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tffone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EXCLUIR2)
@@ -152,8 +160,8 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
                     .addComponent(ADICIONAR2)
                     .addComponent(EDITAR2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(101, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -172,52 +180,59 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LIMPAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPAR2ActionPerformed
-    cpf.setText("");
-    fone.setText("");  
-    end.setText("");  
-    nome.setText("");  
+    tfid.setText("");
+    tffone.setText("");  
+    tfend.setText("");  
+    tfnome.setText("");  
  
     }//GEN-LAST:event_LIMPAR2ActionPerformed
 
     private void ADICIONAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONAR2ActionPerformed
-    Cliente cliente = new Cliente();
-    cliente.setCpf(Integer.parseInt(cpf.getText()));
-    cliente.setEndereco(end.getText());
-    cliente.setTelefone(fone.getText());
-    cliente.setNome(nome.getText());
+    Cliente clientes = new Cliente();
+    ClientesDao dao;
+    boolean sts;
+    clientes.setId(Integer.parseInt(tfid.getText()));
+    clientes.setNome(tfnome.getText());
+    clientes.setEndereco(tfend.getText());
+    clientes.setTelefone(tffone.getText());
+    //cliente.setImagem(caminhoImagem); // Define o caminho da imagem no objeto carros
 
+
+    dao = new ClientesDao();
+
+    try {
+        if (!dao.conectar()) {
+            JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
+        } else {
+            if (dao.salvar(clientes)) {
+                JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
+            }
+
+            dao.atualizarTabela((DefaultTableModel) tabelaCliente.getModel());
+            tabelaCliente.revalidate();
+            tabelaCliente.repaint();
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Erro ao atualizar a tabela de carros");
+    }
     }//GEN-LAST:event_ADICIONAR2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+         try {
+    UIManager.setLookAndFeel( new FlatDarkPurpleIJTheme());
+    } catch( Exception ex ) {
+    System.err.println( "Failed to initialize LaF" );
+}
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new gerenciarCarro().setVisible(true);
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(gerenciarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new gerenciarCliente2().setVisible(true);
         });
     }
 
@@ -227,16 +242,16 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     private javax.swing.JButton EXCLUIR2;
     private javax.swing.JLabel GERENCIAR2;
     private javax.swing.JButton LIMPAR2;
-    private javax.swing.JTextField cpf;
-    private javax.swing.JTextField end;
-    private javax.swing.JTextField fone;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTextField nome;
+    private javax.swing.JTable tabelaCliente;
+    private javax.swing.JTextField tfend;
+    private javax.swing.JTextField tffone;
+    private javax.swing.JTextField tfid;
+    private javax.swing.JTextField tfnome;
+    private javax.swing.JLabel txtid;
+    private javax.swing.JLabel txtnome;
     // End of variables declaration//GEN-END:variables
 }
