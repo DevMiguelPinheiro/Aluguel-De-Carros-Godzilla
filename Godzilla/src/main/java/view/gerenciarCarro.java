@@ -9,7 +9,10 @@ import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 import java.sql.ResultSetMetaData;
 import data.Carros;
 import control.CarrosDao;
+import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,6 +26,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 
 
 /**
@@ -37,6 +44,22 @@ public class gerenciarCarro extends javax.swing.JFrame {
     public gerenciarCarro() {
         initComponents();
         exibirDados();
+        JRootPane rootPane;
+        rootPane = SwingUtilities.getRootPane(this);
+        rootPane.setWindowDecorationStyle(JRootPane.FRAME);
+        JLayeredPane layeredPane = rootPane.getLayeredPane();
+        layeredPane.setBackground(Color.RED);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    addWindowListener(new WindowAdapter() {
+    @Override
+    public void windowClosing(WindowEvent e) {
+        SwingUtilities.invokeLater(() -> {
+            TelaPrincipal telaPrincipal = new TelaPrincipal();
+            telaPrincipal.setVisible(true);
+        });
+    }
+});
     
     }
     
@@ -75,6 +98,15 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aluguel de carros ");
+        setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                fechar(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                fechar(evt);
+            }
+        });
 
         jPanel1.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 600));
@@ -338,6 +370,10 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private void SELECIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SELECIONARActionPerformed
         selecionarImagem();
     }//GEN-LAST:event_SELECIONARActionPerformed
+
+    private void fechar(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_fechar
+
+    }//GEN-LAST:event_fechar
     
     public void exibirDados() {
     try {

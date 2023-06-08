@@ -5,8 +5,12 @@
 package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import java.awt.Color;
 import java.sql.SQLException;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
@@ -25,6 +29,12 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
      */
     public gerenciarCliente2() {
         initComponents();
+        setTitle("Aluguel de carros ");
+        JRootPane rootPane;
+        rootPane = SwingUtilities.getRootPane(this);
+        rootPane.setWindowDecorationStyle(JRootPane.FRAME);
+        JLayeredPane layeredPane = rootPane.getLayeredPane();
+        layeredPane.setBackground(Color.RED);
     }
 
     /**
@@ -54,6 +64,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         tabelaCliente = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         GERENCIAR2.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
         GERENCIAR2.setText("Gerenciar Cliente");
@@ -231,7 +242,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
 }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new gerenciarCarro().setVisible(true);
+                new gerenciarCliente2().setVisible(true);
             }
         });
     }
