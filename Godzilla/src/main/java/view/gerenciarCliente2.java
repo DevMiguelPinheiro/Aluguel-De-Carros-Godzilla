@@ -6,15 +6,22 @@ package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 import java.awt.Color;
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import model.Cliente;
-import model.ClientesDao;
+import model.dao.ClientesDao;
+import model.entities.Cliente;
+import model.dao.ClientesDao;
 
 
 
@@ -36,6 +43,11 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         JLayeredPane layeredPane = rootPane.getLayeredPane();
         layeredPane.setBackground(Color.RED);
     }
+    
+    private Connection con;
+    private Statement st;
+    private ResultSetMetaData metaData;
+    private ResultSet rs;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -77,6 +89,11 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         });
 
         EXCLUIR2.setText("EXCLUIR");
+        EXCLUIR2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EXCLUIR2ActionPerformed(evt);
+            }
+        });
 
         EDITAR2.setText("EDITAR");
 
@@ -189,7 +206,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+ 
     private void LIMPAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPAR2ActionPerformed
     tfid.setText("");
     tffone.setText("");  
@@ -231,10 +248,84 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_ADICIONAR2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    private void EXCLUIR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EXCLUIR2ActionPerformed
+        int selectedRow = tabelaCliente.getSelectedRow(); // Obtém a linha selecionada
+
+        if (selectedRow != -1) { // Verifica se alguma linha foi selecionada
+            String placa = tabelaCliente.getValueAt(selectedRow, 0).toString(); // Obtém o valor da coluna "PLACA" da linha selecionada
+
+            int confirm = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o carro com a placa: " + placa + "?", "Excluir Carro", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) { // Confirmação do usuário
+                ClientesDao dao = new ClientesDao();
+
+                try {
+                    if (!dao.conectar()) {
+                        JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
+                    } else {
+                        if (dao.excluirCarro(placa)) { // Exclui o carro com a placa especificada
+                            JOptionPane.showMessageDialog(null, "Carro excluído com sucesso!");
+                            DefaultTableModel model = (DefaultTableModel) tabelaCliente.getModel();
+                            model.removeRow(selectedRow); // Remove a linha da tabela
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Não foi possível excluir o carro");
+                        }
+                    }
+                } catch (HeadlessException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erro ao excluir o cliente");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um cliente para excluir");
+        }
+
+    }//GEN-LAST:event_EXCLUIR2ActionPerformed
+    
+    public void exibirDados() {
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod", "root", "1234");
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * FROM clientes");
+            tabelaCliente.setModel(resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // Método para adaptar a tabela ao banco de dados
+    public DefaultTableModel resultSetToTableModel(ResultSet rs) throws SQLException {
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        // Obter os nomes das colunas
+        String[] columnNames = new String[columnCount];
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames[column - 1] = metaData.getColumnName(column);
+        }
+
+        // Criar o modelo de tabela vazio
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        // Preencher o modelo de tabela com os dados do ResultSet
+        while (rs.next()) {
+            Object[] rowData = new Object[columnCount];
+            for (int column = 1; column <= columnCount; column++) {
+                rowData[column - 1] = rs.getObject(column);
+            }
+            model.addRow(rowData);
+        }
+
+        return model;
+    }
+
+    
+    
+    
+
+    
+    
+public static void main(String args[]) {
          try {
     UIManager.setLookAndFeel( new FlatDarkPurpleIJTheme());
     } catch( Exception ex ) {
@@ -247,6 +338,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         });
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ADICIONAR2;
     private javax.swing.JButton EDITAR2;

@@ -7,8 +7,8 @@ package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 import java.sql.ResultSetMetaData;
-import data.Carros;
-import control.CarrosDao;
+import model.entities.Carros;
+import model.dao.CarrosDao;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.WindowAdapter;
@@ -25,6 +25,8 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -50,16 +52,23 @@ public class gerenciarCarro extends javax.swing.JFrame {
         JLayeredPane layeredPane = rootPane.getLayeredPane();
         layeredPane.setBackground(Color.RED);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        tabelacarros.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+    int selectedRow = tabelacarros.getSelectedRow();
+    if (selectedRow != -1) {
+        PLACA.setText(tabelacarros.getValueAt(selectedRow, 0).toString());
+        MARCA.setText(tabelacarros.getValueAt(selectedRow, 1).toString());
+        MODELO.setText(tabelacarros.getValueAt(selectedRow, 2).toString());
+        
+        // Alteração para exibir o valor do campo "PRECO" ao invés do campo "STATUS"
+        PRECO.setText(tabelacarros.getValueAt(selectedRow, 4).toString());
 
-    addWindowListener(new WindowAdapter() {
-    @Override
-    public void windowClosing(WindowEvent e) {
-        SwingUtilities.invokeLater(() -> {
-            TelaPrincipal telaPrincipal = new TelaPrincipal();
-            telaPrincipal.setVisible(true);
-        });
     }
+}
+
 });
+
+    
     
     }
     
@@ -81,7 +90,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
         MODELO = new javax.swing.JTextField();
         PLACA = new javax.swing.JTextField();
         MARCA = new javax.swing.JTextField();
-        VALOR = new javax.swing.JTextField();
+        PRECO = new javax.swing.JTextField();
         ADICIONAR = new javax.swing.JButton();
         EXCLUIR = new javax.swing.JButton();
         EDITAR = new javax.swing.JButton();
@@ -135,6 +144,11 @@ public class gerenciarCarro extends javax.swing.JFrame {
         });
 
         EDITAR.setText("EDITAR");
+        EDITAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EDITARActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("PLACA");
 
@@ -205,7 +219,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(68, 68, 68)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(VALOR, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PRECO, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +260,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PLACA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(VALOR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PRECO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbstatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MARCA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MODELO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -269,7 +283,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 794, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 9, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,7 +300,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
     private void LIMPAR1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPAR1ActionPerformed
         PLACA.setText("");
-        VALOR.setText("");
+        PRECO.setText("");
         MODELO.setText("");
         MARCA.setText("");
     }//GEN-LAST:event_LIMPAR1ActionPerformed
@@ -334,12 +348,12 @@ public class gerenciarCarro extends javax.swing.JFrame {
     CarrosDao dao;
     boolean sts;
     carros.setPlaca(PLACA.getText());
+    carros.setMarca(MARCA.getText());
+    carros.setModelo(MODELO.getText());
+    carros.setPreco(Double.parseDouble(PRECO.getText()));
     String statusSelecionado = (String) cbstatus.getSelectedItem();
     carros.setStatus(statusSelecionado);
-    carros.setPreco(Double.parseDouble(VALOR.getText()));
-    carros.setMarca(MARCA.getText());
-    carros.setImagem(caminhoImagem); // Define o caminho da imagem no objeto carros
-    carros.setModelo(MODELO.getText());
+    
 
     dao = new CarrosDao();
 
@@ -374,7 +388,73 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private void fechar(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_fechar
 
     }//GEN-LAST:event_fechar
+
+    private void EDITARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EDITARActionPerformed
+        try {
+            editarDados();
+        } catch (SQLException ex) {
+            Logger.getLogger(gerenciarCarro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_EDITARActionPerformed
     
+    private void editarDados() throws SQLException {
+    CarrosDao dao = new CarrosDao();
+    int selectedRow = tabelacarros.getSelectedRow();
+
+    if (selectedRow != -1) {
+        String placa = tabelacarros.getValueAt(selectedRow, 0).toString();
+        String novoPlaca = PLACA.getText();
+        String novoMarca = MARCA.getText();
+        String novoModelo = MODELO.getText();
+        double novoPreco = Double.parseDouble(PRECO.getText());
+
+        if (!dao.conectar()) {
+            JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
+            return;
+        }
+
+        try {
+            // Get the current status from the database
+            String currentStatus = dao.getStatus(placa);
+
+            String novoStatus = cbstatus.getSelectedItem().toString();
+            
+            if (!novoStatus.equals(currentStatus)) {
+                // Update the status in the database
+                if (dao.editarStatusCarro(placa, novoStatus)) {
+                    JOptionPane.showMessageDialog(null, "Status do carro editado com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível editar o status do carro");
+                }
+            }
+
+            if (dao.editarCarro(placa, novoPlaca, novoMarca, novoModelo, novoPreco, novoStatus)) {
+                JOptionPane.showMessageDialog(null, "Dados editados com sucesso!");
+                DefaultTableModel model = (DefaultTableModel) tabelacarros.getModel();
+                model.setValueAt(novoPlaca, selectedRow, 0);
+                model.setValueAt(novoMarca, selectedRow, 1);
+                model.setValueAt(novoModelo, selectedRow, 2);
+                model.setValueAt(novoPreco, selectedRow, 3);
+                model.setValueAt(novoStatus, selectedRow, 4);
+                tabelacarros.clearSelection();
+                PLACA.setText("");
+                MARCA.setText("");
+                MODELO.setText("");
+                PRECO.setText("");
+                // Update the status in the JComboBox
+                cbstatus.setSelectedItem(novoStatus);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível editar os dados do carro");
+            }
+        } catch (HeadlessException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao editar os dados do carro");
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Selecione um carro para editar");
+    }
+}
+
     public void exibirDados() {
     try {
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod", "root", "1234");
@@ -386,6 +466,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     }
 }
 
+    //metodo para adaptar a tabela ao banco de dados
     public DefaultTableModel resultSetToTableModel(ResultSet rs) throws SQLException {
     ResultSetMetaData metaData = rs.getMetaData();
     int columnCount = metaData.getColumnCount();
@@ -465,8 +546,8 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private javax.swing.JTextField MARCA;
     private javax.swing.JTextField MODELO;
     private javax.swing.JTextField PLACA;
+    private javax.swing.JTextField PRECO;
     private javax.swing.JButton SELECIONAR;
-    private javax.swing.JTextField VALOR;
     private javax.swing.JComboBox<String> cbstatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
