@@ -49,8 +49,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(560, 300));
 
-        jPanel1.setForeground(new java.awt.Color(0, 0, 0));
-
         GERENCIAR.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
         GERENCIAR.setText("Godzilla");
 
