@@ -22,21 +22,9 @@ public class ConnectionFactory {
 
     public ConnectionFactory() {
     }
-    //conectar
-     public static boolean conectar(){
-    
-        try { 
-            Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
-            return true;
-        }  catch (ClassNotFoundException | SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
     
      // desconectar
-    public void dc(){
+    public static void closeConnection(){
     try {
             if (ps != null) {
                 ps.close();
@@ -47,11 +35,39 @@ public class ConnectionFactory {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        
     
     }
-     
-     
+    // conectar sem booleano
+    public static Connection getConnection() {
+       
+        try { 
+            Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
+            return con;
+        }  catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+            return null;            
+        }
+        
+    }
     
+        public static boolean getConnectionb(){
     
-    
+        try { 
+            Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
+            return true;
+        }  catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }
+        
+    
+     
+    
+    
+    
+

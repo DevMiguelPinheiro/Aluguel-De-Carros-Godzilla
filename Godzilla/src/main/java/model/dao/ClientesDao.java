@@ -24,21 +24,7 @@ public class ClientesDao {
 
     public ClientesDao() {
     }
-    
-    
-    public boolean conectar(){
-    
-        try { 
-            Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
-            return true;
-        }  catch (ClassNotFoundException | SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-    
-
+        
 
     public boolean salvar(Cliente clientes) {
         
@@ -102,19 +88,5 @@ public class ClientesDao {
             return false;
         }
     }
-    
-    public void dc(){
-    try {
-            if (ps != null) {
-                ps.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    
-    }
-    
+      
     }

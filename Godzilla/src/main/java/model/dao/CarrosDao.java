@@ -4,6 +4,7 @@
  */
 package model.dao;
 
+import factory.ConnectionFactory;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import model.entities.Carros;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
+
 /**
  * data class object usado para acessar / interagir com o sql a partir de uma classe
  * @author migue
@@ -19,24 +21,13 @@ public class CarrosDao {
     private Connection con;
     private PreparedStatement ps;
     private ResultSet rs;
-    
+    ConnectionFactory connectionFactory = new ConnectionFactory();
 
     public CarrosDao() {
+        con = connectionFactory.getConnection();
     }
     
-    
-    public boolean conectar(){
-    
-        try { 
-            Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
-            return true;
-        }  catch (ClassNotFoundException | SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-    
+        
     public boolean salvar(Carros carros) {
         
         try {
@@ -166,21 +157,6 @@ public class CarrosDao {
     }
 }
     
-    public void dc(){
-    try {
-            if (ps != null) {
-                ps.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    
-    }
-
- 
     
     }
     

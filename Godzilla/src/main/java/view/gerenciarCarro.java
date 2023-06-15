@@ -6,6 +6,7 @@ package view;
 
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import factory.ConnectionFactory;
 import java.sql.ResultSetMetaData;
 import model.entities.Carros;
 import model.dao.CarrosDao;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -78,6 +78,8 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private Statement st;
     private ResultSetMetaData metaData;
     private ResultSet rs;
+    private String caminhoImagem = "";
+    
     
 
 
@@ -321,7 +323,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
                 CarrosDao dao = new CarrosDao();
 
                 try {
-                    if (!dao.conectar()) {
+                    if (!ConnectionFactory.getConnectionb()) {
                         JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
                     } else {
                         if (dao.excluirCarro(placa)) { // Exclui o carro com a placa especificada
@@ -353,12 +355,11 @@ public class gerenciarCarro extends javax.swing.JFrame {
     carros.setPreco(Double.parseDouble(PRECO.getText()));
     String statusSelecionado = (String) cbstatus.getSelectedItem();
     carros.setStatus(statusSelecionado);
-    
 
     dao = new CarrosDao();
 
     try {
-        if (!dao.conectar()) {
+        if (!ConnectionFactory.getConnectionb()) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
         } else {
             if (dao.salvar(carros)) {
@@ -374,6 +375,8 @@ public class gerenciarCarro extends javax.swing.JFrame {
     } catch (SQLException e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(null, "Erro ao atualizar a tabela de carros");
+    } finally {
+        ConnectionFactory.closeConnection();
     }
     }//GEN-LAST:event_ADICIONARActionPerformed
 
@@ -408,7 +411,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
         String novoModelo = MODELO.getText();
         double novoPreco = Double.parseDouble(PRECO.getText());
 
-        if (!dao.conectar()) {
+        if (!ConnectionFactory.getConnectionb()) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
             return;
         }
@@ -456,15 +459,18 @@ public class gerenciarCarro extends javax.swing.JFrame {
 }
 
     public void exibirDados() {
-    try {
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod", "root", "1234");
-        st = con.createStatement();
-        rs = st.executeQuery("SELECT * FROM carros");
-        tabelacarros.setModel(resultSetToTableModel(rs));
-    } catch (SQLException ex) {
-        ex.printStackTrace();
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * FROM carros");
+            tabelacarros.setModel(resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
     }
-}
+
 
     //metodo para adaptar a tabela ao banco de dados
     public DefaultTableModel resultSetToTableModel(ResultSet rs) throws SQLException {
@@ -494,7 +500,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
     // selecionar imagem
     // Variável para armazenar o caminho da imagem selecionada
-    private String caminhoImagem = "";
+    
 
     private void selecionarImagem() {
     JFileChooser fileChooser = new JFileChooser();

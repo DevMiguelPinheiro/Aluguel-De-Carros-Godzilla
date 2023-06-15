@@ -5,6 +5,7 @@
 package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import factory.ConnectionFactory;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Connection;
@@ -229,7 +230,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     dao = new ClientesDao();
 
     try {
-        if (!dao.conectar()) {
+        if (!ConnectionFactory.getConnectionb()) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
         } else {
             if (dao.salvar(clientes)) {
@@ -260,7 +261,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
                 ClientesDao dao = new ClientesDao();
 
                 try {
-                    if (!dao.conectar()) {
+                    if (!ConnectionFactory.getConnectionb()) {
                         JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
                     } else {
                         if (dao.excluirCarro(placa)) { // Exclui o carro com a placa especificada
@@ -284,7 +285,7 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     
     public void exibirDados() {
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod", "root", "1234");
+            con = ConnectionFactory.getConnection();
             st = con.createStatement();
             rs = st.executeQuery("SELECT * FROM clientes");
             tabelaCliente.setModel(resultSetToTableModel(rs));
@@ -318,11 +319,6 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
 
         return model;
     }
-
-    
-    
-    
-
     
     
 public static void main(String args[]) {
