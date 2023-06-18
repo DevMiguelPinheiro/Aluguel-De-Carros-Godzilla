@@ -3,8 +3,7 @@ package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 import javax.swing.JOptionPane;
-import view.gerenciarCarro;
-import control.UsuariosDao;
+import controller.LoginController;
 import java.awt.Color;
 import javax.swing.JLayeredPane;
 import javax.swing.JRootPane;
@@ -139,23 +138,17 @@ public class Login extends javax.swing.JFrame {
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
     String username = usuario.getText();
-    String password = new String(senha.getPassword());
-
-    // Instancia a classe UsuariosDao
-    UsuariosDao usuariosDao = new UsuariosDao();
-
-    // Chama o método authenticate para verificar a autenticação
-    boolean authenticated = usuariosDao.autenticar(username, password);
-
-    if (authenticated) {
-        // Autenticação bem-sucedida
-        JOptionPane.showMessageDialog(this, "Login bem-sucedido!");
-        // Aqui você pode adicionar a lógica para redirecionar para a próxima tela após o login
-        // Por exemplo: new gerenciarCarro().setVisible(true);
+    String password = new String(senha.getPassword());        
+    LoginController loginController = new LoginController();
+    if (!loginController.realizarLogin(username, password)) {
+        // Credenciais incorretas, exiba uma mensagem de erro
+        JOptionPane.showMessageDialog(null, "Credenciais incorretas. Tente novamente.");
     } else {
-        // Autenticação falhou
-        JOptionPane.showMessageDialog(this, "Nome de usuário ou senha inválidos!");
-    }    
+        // Credenciais corretas, execute o login e vá para a tela principal
+        TelaPrincipal telaPrincipal = new TelaPrincipal();
+        dispose();
+        telaPrincipal.setVisible(true);
+    }           
     }//GEN-LAST:event_loginActionPerformed
 
 

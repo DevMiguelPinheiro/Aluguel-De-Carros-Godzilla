@@ -22,8 +22,7 @@ public class ConnectionFactory {
 
     public ConnectionFactory() {
     }
-    
-     // desconectar
+    // desconectar
     public static void closeConnection(){
     try {
             if (ps != null) {
@@ -35,9 +34,7 @@ public class ConnectionFactory {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
-    
-    }
+    }    
     // conectar sem booleano
     public static Connection getConnection() {
        
@@ -50,10 +47,9 @@ public class ConnectionFactory {
             return null;            
         }
         
-    }
-    
-        public static boolean getConnectionb(){
-    
+    }    
+    //conectar com booleano
+    public static boolean getConnectionb(){    
         try { 
             Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
@@ -63,7 +59,30 @@ public class ConnectionFactory {
             return false;
         }
     }
+    //login
+    public static boolean login(String usuario, String senha) {
+        try {
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM usuarios WHERE usuario = ? AND senha = ?");
+            ps.setString(1, usuario);
+            ps.setString(2, senha);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            rs.close();
+            ps.close();
+            con.close();
+
+            return count > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    
+    }
+    
 }
+
         
     
      

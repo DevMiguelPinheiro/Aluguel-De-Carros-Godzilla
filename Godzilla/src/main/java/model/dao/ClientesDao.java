@@ -5,6 +5,7 @@
 package model.dao;
 
 
+import factory.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,30 +21,30 @@ public class ClientesDao {
     private Connection con;
     private PreparedStatement ps;
     private ResultSet rs;
+    ConnectionFactory connectionFactory = new ConnectionFactory();
     
 
     public ClientesDao() {
+      con = connectionFactory.getConnection();
     }
         
 
     public boolean salvar(Cliente clientes) {
-        
-        try {
-        String sql = "INSERT INTO clientes (id, nome, endereco,telefone) VALUES (?, ?, ?, ?)";
+    try {
+        String sql = "INSERT INTO clientes (id, nome, endereco, telefone) VALUES (null, ?, ?, ?)";
         ps = con.prepareStatement(sql);
-        ps.setInt(1, clientes.getId());
-        ps.setString(2, clientes.getNome());
-        ps.setString(3, clientes.getEndereco());
-        ps.setString(4, clientes.getTelefone());
-        
+        ps.setString(1, clientes.getNome());
+        ps.setString(2, clientes.getEndereco());
+        ps.setString(3, clientes.getTelefone());
         
         ps.executeUpdate();
         return true;
-        }catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        return false;
         } 
     }
+
     
     public void atualizarTabela(DefaultTableModel model) throws SQLException {
          String query = "SELECT * FROM clientes";
@@ -57,9 +58,9 @@ public class ClientesDao {
             Object[] rowData = new Object[6]; // Adicionei mais um elemento para o array
 
             // Preencher o array rowData com os dados do ResultSet
-            rowData[0] = rs.getString("endereco");
-            rowData[1] = rs.getString("id");
-            rowData[2] = rs.getString("nome");
+            rowData[0] = rs.getString("id");
+            rowData[1] = rs.getString("nome");
+            rowData[2] = rs.getString("endereco");
             rowData[3] = rs.getString("telefone");
             model.addRow(rowData);
         }
@@ -68,12 +69,32 @@ public class ClientesDao {
     } finally {
         if (ps != null) {
             ps.close();
+            }
         }
-    }
         
-    }   
+    }
+    
+    public boolean editarCliente(String idAntigo, String novoNome, String novoEndereco, String novoTelefone) {
+    try {
+        String query = "UPDATE clientes SET nome = ?, endereco = ?, telefone = ? WHERE id = ?";
+        ps = con.prepareStatement(query);
+        ps.setString(1, novoNome);
+        ps.setString(2, novoEndereco);
+        ps.setString(3, novoTelefone);
+        ps.setString(4, idAntigo);
 
-    public boolean excluirCarro(String placa) {
+        int rowsAffected = ps.executeUpdate();
+        ps.close();
+
+        return rowsAffected > 0; // Retorna true se pelo menos uma linha foi afetada (atualizada)
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        return false;
+    }
+}
+
+
+    public boolean excluirCliente(String placa) {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod", "root", "1234");
             String query = "DELETE FROM clientes WHERE ID = ?";

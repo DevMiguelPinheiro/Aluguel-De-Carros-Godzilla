@@ -8,9 +8,11 @@ import factory.ConnectionFactory;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement; 
 import model.entities.Carros;
 import java.sql.ResultSet;
+import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -111,6 +113,59 @@ public class CarrosDao {
     } catch (SQLException ex) {
         ex.printStackTrace();
         return false;
+    }
+}
+    
+    public void listarCarrosDisponiveis(DefaultListModel<String> model) {
+    try {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement ps = con.prepareStatement("SELECT modelo, placa, preco FROM carros WHERE status = ?");
+        ps.setString(1, "DISPONIVEL");
+        ResultSet rs = ps.executeQuery();
+
+        model.clear(); // Limpa o modelo da JList
+
+        while (rs.next()) {
+            String modelo = rs.getString("modelo");
+            String placa = rs.getString("placa");
+            double preco = rs.getDouble("preco");
+
+            String item = modelo + " - Placa: " + placa + " - R$" + preco;
+            model.addElement(item); // Adiciona o item ao modelo da JList
+        }
+
+        rs.close();
+        ps.close();
+        con.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+    public void listarCarrosIndisponiveis(DefaultListModel<String> model) {
+    try {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement ps = con.prepareStatement("SELECT modelo, placa, preco FROM carros WHERE status = ?");
+        ps.setString(1, "ALUGADO");
+ 
+        ResultSet rs = ps.executeQuery();
+
+        model.clear(); // Limpa o modelo da JList
+
+        while (rs.next()) {
+            String modelo = rs.getString("modelo");
+            String placa = rs.getString("placa");
+            double preco = rs.getDouble("preco");
+
+            String item = modelo + " - Placa: " + placa + " - R$" + preco;
+            model.addElement(item); // Adiciona o item ao modelo da JList
+        }
+
+        rs.close();
+        ps.close();
+        con.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
 }
     

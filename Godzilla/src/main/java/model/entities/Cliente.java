@@ -9,7 +9,6 @@ package model.entities;
  * @author migue
  */
 public class Cliente {
-    private int id;
     private String nome;
     private String endereco;
     private String telefone;
@@ -21,14 +20,6 @@ public class Cliente {
 
     
     //getters e setters
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;
