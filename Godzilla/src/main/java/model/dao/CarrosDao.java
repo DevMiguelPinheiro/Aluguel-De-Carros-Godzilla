@@ -12,6 +12,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement; 
 import model.entities.Carros;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,6 +31,43 @@ public class CarrosDao {
         con = connectionFactory.getConnection();
     }
     
+    public List<Carros> getCarros(){
+		
+		String sql = "SELECT * FROM listas.carros";
+		
+		List<Carros> carros = new ArrayList<Carros>();		
+	
+		try {
+			con = ConnectionFactory.getConnection();
+			
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				
+				Carros carro = new Carros();
+				
+				//Recuperar placa
+				carro.setPlaca(rs.getString("placa"));;
+				//Recuperar marca
+				carro.setMarca(rs.getString("marca"));
+				//Recuperar modelo
+				carro.setModelo(rs.getString("modelo"));
+				//Recuperar status do carro
+				carro.setStatus(rs.getString("status_carro"));
+				//Recuperar preco
+				carro.setPreco(rs.getDouble("preco"));
+				
+				
+				carros.add(carro);
+				
+			}
+		}catch (Exception e) {
+				e.printStackTrace();
+			}
+                return carros;
+        }
         
     public boolean salvar(Carros carros) {
         
@@ -39,8 +78,7 @@ public class CarrosDao {
         ps.setString(2, carros.getMarca());
         ps.setString(3, carros.getModelo());
         ps.setString(4, carros.getStatus());
-        ps.setDouble(5, carros.getPreco());
-        
+        ps.setDouble(5, carros.getPreco());       
         ps.executeUpdate();
         return true;
         }catch (SQLException ex) {

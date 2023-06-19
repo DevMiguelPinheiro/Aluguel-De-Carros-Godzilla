@@ -14,8 +14,8 @@ import java.util.Date;
  *
  * @author migue
  */
-public class Alugar {
-    
+public class Aluguel {
+    private int id_aluguel;
     private String placaCarro;
     private int idCliente;
     private String nomeCliente;    
@@ -26,7 +26,20 @@ public class Alugar {
 
  
     
-    public Alugar() {
+    public Aluguel() {
+    }
+
+    public Aluguel(String placaCarro) {
+        this.placaCarro = placaCarro;
+    }
+    
+    
+    public int getId_aluguel() {
+        return id_aluguel;
+    }
+
+    public void setId_aluguel(int id_aluguel) {
+        this.id_aluguel = id_aluguel;
     }
 
     public String getPlacaCarro() {

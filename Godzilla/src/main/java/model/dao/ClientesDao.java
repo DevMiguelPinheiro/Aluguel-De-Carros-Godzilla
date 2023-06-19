@@ -6,12 +6,14 @@ package model.dao;
 
 
 import factory.ConnectionFactory;
+import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import model.entities.Cliente;
 /**
  * data class object usado para acessar / interagir com o sql a partir de uma classe
@@ -28,7 +30,62 @@ public class ClientesDao {
       con = connectionFactory.getConnection();
     }
         
-
+    public List<Cliente> getClientes(){
+			
+			String sql = "SELECT * FROM listas.clientes";
+			
+			List<Cliente> clientes = new ArrayList<Cliente>();
+			
+			Connection conn = null;
+			PreparedStatement pstm = null;
+			//Classe que vai recuperar os dados do banco. ***SELECT****
+			ResultSet rset = null;
+			
+			try {
+				
+				
+				pstm = (PreparedStatement) con.prepareStatement(sql);
+				
+				rset = pstm.executeQuery();
+				
+				while (rset.next()) {
+					
+					Cliente cliente = new Cliente();
+					
+					//Recuperar o id
+					cliente.setId_cliente(rset.getInt("id"));;
+					//Recuperar o nome
+					cliente.setNome(rset.getString("nome"));
+					//Recuperar a endereço
+					cliente.setEndereco(rset.getString("endereco"));
+					//Recuperar telefone
+					cliente.setTelefone(rset.getString("telefone"));
+					
+					clientes.add(cliente);
+					
+				}
+			}catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					try {
+						if(rset!=null) {
+							rset.close();
+						}
+						
+						if(pstm!=null) {
+							pstm.close();
+						}
+						
+						if(conn!=null) {
+							conn.close();
+						}
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			
+				return clientes;
+		}
     public boolean salvar(Cliente clientes) {
     try {
         String sql = "INSERT INTO clientes (id, nome, endereco, telefone) VALUES (null, ?, ?, ?)";

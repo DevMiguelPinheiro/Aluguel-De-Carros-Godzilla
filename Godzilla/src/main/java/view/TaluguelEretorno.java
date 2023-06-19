@@ -21,10 +21,13 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import model.dao.AlugueisRetornoDao;
+import model.dao.AlugarCarroDao;
 import model.dao.CarrosDao;
-import model.entities.Alugar;
+import model.dao.Procura_no_banco;
+import model.entities.Aluguel;
+import model.entities.Carros;
 import model.entities.Cliente;
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -51,7 +54,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
         initComponents();
         carrosDao = new CarrosDao();
         carrosModel = new DefaultListModel<>();
-        Alugar aluguel = new Alugar();
+        Aluguel aluguel = new Aluguel();
         exibirCarros();
         preencherListaClientes(listaClientes);
     
@@ -302,36 +305,51 @@ public class TaluguelEretorno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void alugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alugarActionPerformed
-    AlugueisRetornoDao dao = new AlugueisRetornoDao();
-    Alugar aluguel = new Alugar();
-    aluguel.setIdCliente(Integer.parseInt(tfIdCliente.getText()));
-    String dataRetornoStr = tfdataRetorno.getText();
-    try {
-        LocalDate dataRetorno = LocalDate.parse(dataRetornoStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        aluguel.setDataRetorno(dataRetorno);
-    } catch (DateTimeParseException e) {
-        JOptionPane.showMessageDialog(this, "Data de retorno inválida. Formato esperado: dd/MM/yyyy");
-    }
-    
-    try {
-        if (!ConnectionFactory.getConnectionb()) {
-            JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
-        } else {
-            if (dao.inserirAluguel(aluguel)) {
-                JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
-            }
+    AlugarCarroDao dao = new AlugarCarroDao();
+    Carros carro  = new Carros();
+    Cliente cliente = new Cliente();
+    Procura_no_banco procura = new Procura_no_banco();
+    String placa = tfCarro.getText();
+    String idCliente = tfIdCliente.getText();
+    String dataRetorno = tfdataRetorno.getText();
+    int idClienteInt = Integer.parseInt(idCliente);
 
-            dao.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
-            tabelacarros.revalidate();
-            tabelacarros.repaint();
+    if (placa.isEmpty() || idCliente.isEmpty() || dataRetorno.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try {
+        LocalDate dataAluguel = LocalDate.now();
+        LocalDate dataRetornoFormatted = LocalDate.parse(dataRetorno, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        if (dataRetornoFormatted.isBefore(dataAluguel)) {
+            JOptionPane.showMessageDialog(this, "Data de retorno inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Erro ao atualizar a tabela de carros");
-    } finally {
-        ConnectionFactory.closeConnection();
+
+        String carrostr = procura.procura_pela_placa_carro(placa);
+        carro.setPlaca(carrostr);
+        String clientestr = procura.retorna_nome_pelo_Id(idClienteInt);
+        cliente.setNome(clientestr);
+        
+        Aluguel aluguel = new Aluguel();
+        aluguel.setPlacaCarro(placa);
+        aluguel.setDataAluguel(dataAluguel);
+        aluguel.setDataRetorno(dataRetornoFormatted);
+        aluguel.setTaxaAluguel(0.0); // Defina a taxa de aluguel correta aqui
+
+        dao.alugarCarro(aluguel, carro, cliente, idClienteInt, placa);
+
+        // Limpar campos
+        tfCarro.setText("");
+        tfIdCliente.setText("");
+        tfNome.setText("");
+        tfdataRetorno.setText("");
+
+        JOptionPane.showMessageDialog(this, "Carro alugado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+    } catch (DateTimeParseException e) {
+        JOptionPane.showMessageDialog(this, "Formato de data inválido! Use o formato: dd/MM/yyyy", "Erro", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_alugarActionPerformed
 
@@ -347,6 +365,27 @@ public class TaluguelEretorno extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lblmenuMouseClicked
     
+
+    private Cliente getSelectedCliente() {
+    String selectedValue = listaClientes.getSelectedValue();
+    if (selectedValue != null) {
+        String[] parts = selectedValue.split(" - ");
+        int id = Integer.parseInt(parts[0]);
+        String nome = parts[1];
+        return new Cliente(id, nome);
+    }
+    return null;
+}
+    private Carros getSelectedCarro() {
+    int selectedRow = tabelacarros.getSelectedRow();
+    if (selectedRow != -1) {
+        String placa = tabelacarros.getValueAt(selectedRow, 0).toString();
+        // Você precisará obter as informações adicionais do carro do banco de dados ou de algum outro local
+        // Aqui, estou apenas retornando um objeto Carros com a placa definida
+        return new Carros(placa);
+    }
+    return null;
+}
     public void exibirCarros() {
         try {
             con = ConnectionFactory.getConnection();

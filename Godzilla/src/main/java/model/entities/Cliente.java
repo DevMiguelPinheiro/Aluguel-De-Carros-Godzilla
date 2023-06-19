@@ -9,6 +9,7 @@ package model.entities;
  * @author migue
  */
 public class Cliente {
+    private int id_cliente;
     private String nome;
     private String endereco;
     private String telefone;
@@ -17,9 +18,20 @@ public class Cliente {
     public Cliente() {
     }
 
-
+    public Cliente(int id, String nome) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
     
     //getters e setters
+    public int getId_cliente() {    
+        return id_cliente;
+    }
+
+    
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
+    }
 
     public String getNome() {
         return nome;

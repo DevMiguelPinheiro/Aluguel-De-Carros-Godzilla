@@ -19,6 +19,10 @@ public class Carros {
     public Carros() {
     }
 
+    public Carros(String placa) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public String getPlaca() {
         return placa;
     }
