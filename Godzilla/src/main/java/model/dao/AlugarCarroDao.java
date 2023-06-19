@@ -35,32 +35,27 @@ public class AlugarCarroDao {
         con = connectionFactory.getConnection();
     }
 
-    public void  alugarCarro(Aluguel aluguel,Carros carro, Cliente cliente, int id_cliente, String placa) {
-		Procura_no_banco procurar = new Procura_no_banco();
-		if (procurar.procura_pelo_id_cliente(id_cliente) && procurar.procura_pela_placa_carrob(aluguel.getPlacaCarro())) {
-			String sql = "INSERT INTO aluguel(id_cliente, placa_carro, nome, data_aluguel, data_retorno, taxa) VALUES(?, ?, ?, ?, ?, ?)";
-			String sql2 = "UPDATE carros SET status = ?"+
-			"WHERE placa = ?";
-			
-	
-			PreparedStatement pstm2  = null;
-			
-			
-			try {
+    public void  alugarCarro(Aluguel aluguel, int id_cliente, String placa) {
+		 
 				
-				//cria uma PreparedStatement para executar uma query
-				ps = (PreparedStatement) con.prepareStatement(sql);
-				pstm2 = con.prepareStatement(sql2);
+	PreparedStatement pstm2  = null;			
+	try {
+		String sql = "INSERT INTO aluguel2(id_do_cliente, placa_do_carro, data_aluguel, data_retorno, taxa) VALUES(?, ?, ?, ?, ?)";
+		String sql2 = "UPDATE carros SET status = ?"+
+		"WHERE placa = ?";
+			//cria uma PreparedStatement para executar uma query
+			ps = (PreparedStatement) con.prepareStatement(sql);
+			pstm2 = con.prepareStatement(sql2);
 				
-				pstm2.setString(1, "ALUGADO");
-				pstm2.setString(2, aluguel.getPlacaCarro());
+			pstm2.setString(1, "ALUGADO");
+			pstm2.setString(2, aluguel.getPlacaCarro());
 				
-                                ps.setInt(1, id_cliente);
-				ps.setString(2, placa);
-				ps.setString(3, procurar.retorna_nome_pelo_Id(id_cliente));
-				ps.setString(4, aluguel.getDataAluguel().toString());
-				ps.setString(5, aluguel.getDataRetorno().toString());
-				ps.setDouble(6, aluguel.getTaxaAluguel());
+                        ps.setInt(1, id_cliente);
+			ps.setString(2, placa);
+//			ps.setString(3, procurar.retorna_nome_pelo_Id(id_cliente));
+			ps.setString(3, aluguel.getDataAluguel().toString());
+			ps.setString(4, aluguel.getDataRetorno().toString());
+			ps.setDouble(5, aluguel.getTaxaAluguel());
 				
 				//Executa query
 				ps.execute();
@@ -68,7 +63,7 @@ public class AlugarCarroDao {
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
-                }
+    
     }
     public boolean retorno(String placa) {
     try {
@@ -95,7 +90,7 @@ public class AlugarCarroDao {
 		
 		String sql = "SELECT * FROM alugueis";
 		
-		List<Aluguel> listaAlugueis = new ArrayList<Aluguel>();
+		List<Aluguel> listaAluguel = new ArrayList<Aluguel>();
 		
 		try {
 			
@@ -124,7 +119,7 @@ public class AlugarCarroDao {
 				aluguel.setTaxaAluguel(rs.getDouble("taxa"));
 				
 				
-				listaAlugueis.add(aluguel);
+				listaAluguel.add(aluguel);
 				
 			}
 		}catch (Exception e) {
@@ -147,7 +142,7 @@ public class AlugarCarroDao {
 			}
 		}
 		
-		return listaAlugueis;
+		return listaAluguel;
 	}
     
     public void retorna_carro(Retorno retorno, int id_aluguel) {

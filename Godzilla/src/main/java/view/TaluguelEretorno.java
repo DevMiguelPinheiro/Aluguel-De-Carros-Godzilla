@@ -327,11 +327,12 @@ public class TaluguelEretorno extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Data de retorno inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        String carrostr = procura.procura_pela_placa_carro(placa);
-        carro.setPlaca(carrostr);
-        String clientestr = procura.retorna_nome_pelo_Id(idClienteInt);
-        cliente.setNome(clientestr);
+        
+//
+//        String carrostr = procura.procura_pela_placa_carro(placa);
+        
+//        String clientestr = procura.retorna_nome_pelo_Id(idClienteInt);
+//        cliente.setNome(clientestr);
         
         Aluguel aluguel = new Aluguel();
         aluguel.setPlacaCarro(placa);
@@ -339,7 +340,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
         aluguel.setDataRetorno(dataRetornoFormatted);
         aluguel.setTaxaAluguel(0.0); // Defina a taxa de aluguel correta aqui
 
-        dao.alugarCarro(aluguel, carro, cliente, idClienteInt, placa);
+        dao.alugarCarro(aluguel, idClienteInt, placa);
 
         // Limpar campos
         tfCarro.setText("");
