@@ -4,9 +4,15 @@
  */
 package model.dao;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.sql.Date;
 import java.sql.SQLException;
 import factory.ConnectionFactory;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -52,7 +58,6 @@ public class AlugarCarroDao {
 				
                         ps.setInt(1, id_cliente);
 			ps.setString(2, placa);
-//			ps.setString(3, procurar.retorna_nome_pelo_Id(id_cliente));
 			ps.setString(3, aluguel.getDataAluguel().toString());
 			ps.setString(4, aluguel.getDataRetorno().toString());
 			ps.setDouble(5, aluguel.getTaxaAluguel());
@@ -154,7 +159,6 @@ public class AlugarCarroDao {
 			String sql3 = "DELETE FROM alugueis WHERE id = ?";
 			Connection conn = null;
 			
-			PreparedStatement pstm = null;
 			PreparedStatement pstm2  = null;
 			PreparedStatement pstm3  = null;
 			
@@ -173,15 +177,15 @@ public class AlugarCarroDao {
 				pstm2.setString(1, "DISPONIVEL");
 				pstm2.setString(2, procurar.placa_aluguel_pelo_id(id_aluguel));
 				
-				pstm.setInt(1, id_aluguel);
-				pstm.setString(2, procurar.placa_aluguel_pelo_id(id_aluguel));
-				pstm.setString(3, procurar.nome_aluguel_pelo_id(id_aluguel));
-				pstm.setString(4, retorno.getData_retorno().toString());
-				pstm.setLong(5, retorno.getAtraso());//fazer o calculo
-				pstm.setDouble(6, retorno.getMultaConta());//fazer o calculo
+				ps.setInt(1, id_aluguel);
+				ps.setString(2, procurar.placa_aluguel_pelo_id(id_aluguel));
+				ps.setString(3, procurar.nome_aluguel_pelo_id(id_aluguel));
+				ps.setString(4, retorno.getData_retorno().toString());
+				ps.setLong(5, retorno.getAtraso());//fazer o calculo
+				ps.setDouble(6, retorno.getMultaConta());//fazer o calculo
 				
 				//Executa query
-				pstm.execute();
+				ps.execute();
 				pstm2.execute();
 				pstm3.execute();
 			}catch (Exception e) {
@@ -270,6 +274,44 @@ public class AlugarCarroDao {
 		return listaRetorno;
 	}
         
+    public void gerarRelatorioPDF(List<Aluguel> alugueis) {
+        Document document = new Document();
+
+        try {
+            // Obter o diretório padrão de downloads do sistema
+            String diretorioDownloads = System.getProperty("user.home") + File.separator + "Downloads";
+
+            // Nome do arquivo PDF a ser gerado
+            String arquivoPDF = diretorioDownloads + File.separator + "relatorio.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(arquivoPDF));
+
+            document.open();
+
+            // Título do relatório
+            document.add(new Paragraph("Relatório de Aluguéis"));
+
+            // Informações dos aluguéis
+            for (Aluguel aluguel : alugueis) {
+                document.add(new Paragraph("ID do Aluguel: " + aluguel.getId_aluguel()));
+                document.add(new Paragraph("ID do Cliente: " + aluguel.getIdCliente()));
+                document.add(new Paragraph("Placa do Carro: " + aluguel.getPlacaCarro()));
+                document.add(new Paragraph("Nome do Cliente: " + aluguel.getNomeCliente()));
+                document.add(new Paragraph("Data de Aluguel: " + aluguel.getDataAluguel().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+                document.add(new Paragraph("Data de Retorno: " + aluguel.getDataRetorno().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+                document.add(new Paragraph("Taxa de Aluguel: " + aluguel.getTaxaAluguel()));
+                document.add(new Paragraph("\n"));
+            }
+
+            document.close();
+
+            System.out.println("Relatório gerado com sucesso no arquivo " + arquivoPDF);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }    
+    
     public void atualizarTabela(DefaultTableModel model) throws SQLException {
          String query = "SELECT * FROM carros";
     try {
@@ -300,7 +342,56 @@ public class AlugarCarroDao {
         
     }
     
-    
+    public void gerarNota(String textField1Value, String textField2Value, String textField3Value,String textField4Value) {
+        Document document = new Document();
+
+        try {
+            // Obter o diretório padrão de downloads do sistema
+            String diretorioDownloads = System.getProperty("user.home") + File.separator + "Downloads";
+
+            // Nome do arquivo PDF a ser gerado
+            String arquivoPDF = diretorioDownloads + File.separator + "relatorio.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(arquivoPDF));
+
+            document.open();
+
+            // Adicionar os valores dos campos de texto ao documento PDF
+            document.add(new Paragraph("Locadora Godzilla - Contrato de Aluguel de Carro\n" +
+"\n" +
+"Este documento representa o contrato de aluguel de carro entre a Locadora Godzilla e o cliente abaixo mencionado. Leia atentamente todas as cláusulas antes de assinar."));
+            
+            document.add(new Paragraph("Placa do Carro Alugado: " + textField1Value));
+            document.add(new Paragraph("ID do Cliente: " + textField2Value));
+            document.add(new Paragraph("Data de Retorno do Automóvel: " + textField3Value));
+            document.add(new Paragraph("Nome do Cliente: " + textField4Value));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph("1.O cliente se compromete a utilizar o veículo alugado apenas para fins legais e de acordo com as leis de trânsito vigentes."));
+            document.add(new Paragraph("2.O cliente é responsável por quaisquer danos causados ao veículo durante o período de locação."));
+            document.add(new Paragraph("3.A locação é válida até a data de retorno mencionada acima. Qualquer atraso na devolução estará sujeito a cobranças adicionais."));
+            document.add(new Paragraph("4.A taxa de aluguel será calculada com base no valor total do aluguel, acrescida de 10%."));
+            document.add(new Paragraph("5.O cliente concorda em devolver o veículo com o tanque de combustível na mesma quantidade em que foi fornecido no início da locação."));
+            document.add(new Paragraph("6.A locadora não se responsabiliza por quaisquer objetos pessoais deixados no veículo após a devolução."));
+            document.add(new Paragraph("7.Em caso de acidentes, o cliente deve informar imediatamente a locadora e seguir as instruções fornecidas."));
+            document.add(new Paragraph("Eu," + textField4Value +", concordo com todos os termos e condições mencionados acima. Declaro ter recebido o veículo com a placa"+ textField1Value +"e me comprometo a devolvê-lo até a data de retorno mencionada."));
+            //pega data atual
+            
+            LocalDate dataAtual = LocalDate.now();
+            DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String dataAtualFormatada = dataAtual.format(formatoData);
+
+            document.add(new Paragraph ("Assinatura do Cliente: _______________________ Data: "+dataAtualFormatada+""));
+            document.add(new Paragraph("Assinatura da Locadora: ______________________ Data: ______________"));
+            
+            
+            document.close();
+
+            System.out.println("PDF gerado com sucesso no arquivo " + arquivoPDF);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
 
     

@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -126,6 +128,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         CLIENTE = new javax.swing.JLabel();
         lblmenu = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -217,6 +220,8 @@ public class TaluguelEretorno extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Gerar Relatorio");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -226,7 +231,9 @@ public class TaluguelEretorno extends javax.swing.JFrame {
                 .addComponent(lblmenu)
                 .addGap(313, 313, 313)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,11 +266,17 @@ public class TaluguelEretorno extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblmenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblmenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,13 +319,14 @@ public class TaluguelEretorno extends javax.swing.JFrame {
 
     private void alugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alugarActionPerformed
     AlugarCarroDao dao = new AlugarCarroDao();
-    Carros carro  = new Carros();
+    Carros carro = new Carros();
     Cliente cliente = new Cliente();
     Procura_no_banco procura = new Procura_no_banco();
     String placa = tfCarro.getText();
     String idCliente = tfIdCliente.getText();
     String dataRetorno = tfdataRetorno.getText();
     int idClienteInt = Integer.parseInt(idCliente);
+    String ncliente = tfNome.getText();
 
     if (placa.isEmpty() || idCliente.isEmpty() || dataRetorno.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -327,13 +341,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Data de retorno inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-//
-//        String carrostr = procura.procura_pela_placa_carro(placa);
-        
-//        String clientestr = procura.retorna_nome_pelo_Id(idClienteInt);
-//        cliente.setNome(clientestr);
-        
+
         Aluguel aluguel = new Aluguel();
         aluguel.setPlacaCarro(placa);
         aluguel.setDataAluguel(dataAluguel);
@@ -349,9 +357,20 @@ public class TaluguelEretorno extends javax.swing.JFrame {
         tfdataRetorno.setText("");
 
         JOptionPane.showMessageDialog(this, "Carro alugado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        // Gerar o PDF com os dados do aluguel
+        dao.gerarNota(placa, idCliente, dataRetorno,ncliente);
+
+        // Informar que o PDF foi gerado
+        JOptionPane.showMessageDialog(this, "Relatório PDF gerado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            dao.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
+            tabelacarros.revalidate();
+            tabelacarros.repaint();
     } catch (DateTimeParseException e) {
         JOptionPane.showMessageDialog(this, "Formato de data inválido! Use o formato: dd/MM/yyyy", "Erro", JOptionPane.ERROR_MESSAGE);
-    }
+    }   catch (SQLException ex) {
+            Logger.getLogger(TaluguelEretorno.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_alugarActionPerformed
 
     private void retornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornoActionPerformed
@@ -377,6 +396,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
     }
     return null;
 }
+    
     private Carros getSelectedCarro() {
     int selectedRow = tabelacarros.getSelectedRow();
     if (selectedRow != -1) {
@@ -387,6 +407,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
     }
     return null;
 }
+    
     public void exibirCarros() {
         try {
             con = ConnectionFactory.getConnection();
@@ -453,6 +474,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
 
     return model;
 }
+    
     public String getTextFieldIdCliente() {
     return tfIdCliente.getText();
 }
@@ -483,6 +505,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CLIENTE;
     private javax.swing.JButton alugar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
