@@ -33,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
+import model.dao.CRUD;
 
 
 /**
@@ -60,8 +61,6 @@ public class gerenciarCarro extends javax.swing.JFrame {
         PLACA.setText(tabelacarros.getValueAt(selectedRow, 0).toString());
         MARCA.setText(tabelacarros.getValueAt(selectedRow, 1).toString());
         MODELO.setText(tabelacarros.getValueAt(selectedRow, 2).toString());
-        
-        // Alteração para exibir o valor do campo "PRECO" ao invés do campo "STATUS"
         PRECO.setText(tabelacarros.getValueAt(selectedRow, 4).toString());
 
     }
@@ -388,7 +387,8 @@ public class gerenciarCarro extends javax.swing.JFrame {
 
     private void ADICIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONARActionPerformed
     Carros carros = new Carros();
-    CarrosDao dao;
+    CRUD dao;
+    CarrosDao dao2;
     carros.setPlaca(PLACA.getText());
     carros.setMarca(MARCA.getText());
     carros.setModelo(MODELO.getText());
@@ -396,20 +396,20 @@ public class gerenciarCarro extends javax.swing.JFrame {
     String statusSelecionado = (String) cbstatus.getSelectedItem();
     carros.setStatus(statusSelecionado);
     carros.setImagem(tfimg.getText());
-
-    dao = new CarrosDao();
+    dao2 = new CarrosDao();
+    dao = new CRUD();
 
     try {
         if (!ConnectionFactory.getConnectionb()) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
         } else {
-            if (dao.salvar(carros)) {
+            if (dao.save(carros)) {
                 JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
             }
 
-            dao.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
+            dao2.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
             tabelacarros.revalidate();
             tabelacarros.repaint();
         }
@@ -448,7 +448,8 @@ public class gerenciarCarro extends javax.swing.JFrame {
     }//GEN-LAST:event_lblmenuMouseClicked
     
     private void editarDados() throws SQLException {
-    CarrosDao dao = new CarrosDao();
+    CRUD dao = new CRUD();
+    Carros carro = new Carros();
     int selectedRow = tabelacarros.getSelectedRow();
 
     if (selectedRow != -1) {
@@ -457,6 +458,13 @@ public class gerenciarCarro extends javax.swing.JFrame {
         String novoMarca = MARCA.getText();
         String novoModelo = MODELO.getText();
         double novoPreco = Double.parseDouble(PRECO.getText());
+        String novaImg = tfimg.getText();
+        
+        carro.setPlaca(placa);
+        carro.setPreco(novoPreco);
+        carro.setModelo(novoModelo);
+        carro.setMarca(novoMarca);
+        carro.setImagem(novaImg);
 
         if (!ConnectionFactory.getConnectionb()) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
@@ -464,35 +472,30 @@ public class gerenciarCarro extends javax.swing.JFrame {
         }
 
         try {
-            // Get the current status from the database
-            String currentStatus = dao.getStatus(placa);
 
-            String novoStatus = cbstatus.getSelectedItem().toString();
             
-            if (!novoStatus.equals(currentStatus)) {
+            
                 // Update the status in the database
-                if (dao.editarStatusCarro(placa, novoStatus)) {
+                if (dao.update(carro)) {
                     JOptionPane.showMessageDialog(null, "Status do carro editado com sucesso!");
                 } else {
                     JOptionPane.showMessageDialog(null, "Não foi possível editar o status do carro");
                 }
-            }
+            
 
-            if (dao.editarCarro(placa, novoPlaca, novoMarca, novoModelo, novoPreco, novoStatus)) {
+            if (dao.update(carro)) {
                 JOptionPane.showMessageDialog(null, "Dados editados com sucesso!");
                 DefaultTableModel model = (DefaultTableModel) tabelacarros.getModel();
                 model.setValueAt(novoPlaca, selectedRow, 0);
                 model.setValueAt(novoMarca, selectedRow, 1);
                 model.setValueAt(novoModelo, selectedRow, 2);
                 model.setValueAt(novoPreco, selectedRow, 3);
-                model.setValueAt(novoStatus, selectedRow, 4);
                 tabelacarros.clearSelection();
                 PLACA.setText("");
                 MARCA.setText("");
                 MODELO.setText("");
                 PRECO.setText("");
-                // Update the status in the JComboBox
-                cbstatus.setSelectedItem(novoStatus);
+
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível editar os dados do carro");
             }
