@@ -367,6 +367,49 @@ public class AlugarCarroDao extends Aluguel {
             e.printStackTrace();
         }
     }
+    
+    public void gerarNotaRetorno(String placa, String idCliente, String dataRetorno, String nomeCliente) {
+    Document document = new Document();
+
+    try {
+        // Obter o diretório padrão de downloads do sistema
+        String diretorioDownloads = System.getProperty("user.home") + File.separator + "Downloads";
+
+        // Nome do arquivo PDF a ser gerado
+        String arquivoPDF = diretorioDownloads + File.separator + "relatorio_retorno.pdf";
+        PdfWriter.getInstance(document, new FileOutputStream(arquivoPDF));
+
+        document.open();
+
+        // Adicionar os valores dos campos de texto ao documento PDF
+        document.add(new Paragraph("Locadora Godzilla - Retorno de Carro\n"
+                + "\n"
+                + "Este documento representa o retorno do carro alugado pelo cliente abaixo mencionado. Confira os detalhes do retorno:"));
+
+        document.add(new Paragraph("Placa do Carro: " + placa));
+        document.add(new Paragraph("ID do Cliente: " + idCliente));
+        document.add(new Paragraph("Data de Retorno: " + dataRetorno));
+        document.add(new Paragraph("Nome do Cliente: " + nomeCliente));
+        document.add(new Paragraph(""));
+        document.add(new Paragraph("Agradecemos por utilizar nossos serviços. Por favor, verifique e assine abaixo confirmando o retorno do veículo alugado."));
+
+        // Pega data atual
+        LocalDate dataAtual = LocalDate.now();
+        DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataAtualFormatada = dataAtual.format(formatoData);
+
+        document.add(new Paragraph("Assinatura do Cliente: _______________________ Data: " + dataAtualFormatada + ""));
+        document.add(new Paragraph("Assinatura da Locadora: ______________________ Data: ______________"));
+
+        document.close();
+
+        System.out.println("PDF gerado com sucesso no arquivo " + arquivoPDF);
+    } catch (DocumentException e) {
+        e.printStackTrace();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
 
 }

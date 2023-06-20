@@ -322,6 +322,7 @@ public class TelaRetorno extends javax.swing.JFrame {
         
         double valorCarro = Double.parseDouble(valor);
         LocalDate dataRetornoAtual = LocalDate.now();
+        String dataRetornoAtuall = LocalDate.now().toString();
         LocalDate dataRetornoEsperado = LocalDate.parse(tfdataesperada.getText());
 
         long atraso = ChronoUnit.DAYS.between(dataRetornoEsperado, dataRetornoAtual);
@@ -349,6 +350,8 @@ public class TelaRetorno extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, mensagem);
             } else {
                 JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
+                dao.gerarNotaRetorno(placa, idCliente, dataRetornoAtuall, nomeCliente);
+                
             }
         } else {
             JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
