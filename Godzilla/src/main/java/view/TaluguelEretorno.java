@@ -326,6 +326,7 @@ public class TaluguelEretorno extends javax.swing.JFrame {
     String idCliente = tfIdCliente.getText();
     String dataRetorno = tfdataRetorno.getText();
     int idClienteInt = Integer.parseInt(idCliente);
+    
     String ncliente = tfNome.getText();
 
     if (placa.isEmpty() || idCliente.isEmpty() || dataRetorno.isEmpty()) {

@@ -19,7 +19,7 @@ import model.entities.Cliente;
  * data class object usado para acessar / interagir com o sql a partir de uma classe
  * @author migue
  */
-public class ClientesDao {
+public class ClientesDao extends Cliente{
     private Connection con;
     private PreparedStatement ps;
     private ResultSet rs;

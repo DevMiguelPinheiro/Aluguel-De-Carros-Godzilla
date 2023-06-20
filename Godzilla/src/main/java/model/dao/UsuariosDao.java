@@ -2,19 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package control;
+package model.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import model.entities.Usuarios;
 
 /**
  *
  * @author migue
  */
-public class UsuariosDao {
+public class UsuariosDao extends Usuarios{
     public boolean autenticar(String username, String password) {
     // Configurações de conexão com o banco de dados
     String url = "jdbc:mysql://localhost:3306/nome_do_banco_de_dados";
