@@ -497,17 +497,18 @@ public class TelaAlguel extends javax.swing.JFrame {
      */
     
     public static void main(String args[]) {
-     try {
-        UIManager.setLookAndFeel(new FlatDarkPurpleIJTheme());
-    } catch (Exception ex) {
-        System.err.println("Failed to initialize LaF");
-    }
-
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new TelaAlguel().setVisible(true);
-        }
-    });
+        try {
+    UIManager.setLookAndFeel( new FlatDarkPurpleIJTheme());
+    } catch( Exception ex ) {
+    System.err.println( "Failed to initialize LaF" );
+}
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaAlguel().setVisible(true);
+            }
+        });
+    
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
