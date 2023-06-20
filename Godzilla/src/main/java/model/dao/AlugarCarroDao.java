@@ -154,62 +154,38 @@ public class AlugarCarroDao extends Aluguel {
         return listaAluguel;
     }
 
-    public void retorna_carro(Retorno retorno, int id_aluguel) {
-        Procura_no_banco procurar = new Procura_no_banco();
-        if (procurar.procura_pelo_id_aluguel(id_aluguel)) {
-            String sql = "INSERT INTO retorno(id_aluguel, placa, nome, data_retorno, atraso, multaConta) VALUES(?, ?, ?, ?, ?, ?)";
-            String sql2 = "UPDATE carros SET status_carro = ?"
+    public boolean retornarCarro(Retorno rent) {
+
+        PreparedStatement pstm2 = null;
+        try {
+            String sql = "INSERT INTO retorno(id_aluguel, placa, nome, data_retorno, atraso,multaConta) VALUES(?, ?, ?, ?, ?, ?)";
+            String sql2 = "UPDATE carros SET status = ?"
                     + "WHERE placa = ?";
-            String sql3 = "DELETE FROM alugueis WHERE id = ?";
-            Connection conn = null;
+            //cria uma PreparedStatement para executar uma query
+            ps = (PreparedStatement) con.prepareStatement(sql);
+            pstm2 = con.prepareStatement(sql2);
+            
+           
+            pstm2.setString(1, "ALUGADO");
+            pstm2.setString(2, rent.getPlaca());
+            
+           
+            ps.setInt(1, rent.getId_aluguel());
+            ps.setString(2, rent.getPlaca());
+            ps.setString(3,rent.getNome());
+            ps.setString(4, rent.getData_retorno().toString());
+            ps.setLong(5, rent.getAtraso());
+            ps.setDouble(6, rent.getMultaConta());
 
-            PreparedStatement pstm2 = null;
-            PreparedStatement pstm3 = null;
-
-            try {
-
-                //cria uma PreparedStatement para executar uma query
-                ps = con.prepareStatement(sql);
-                pstm2 = con.prepareStatement(sql2);
-                pstm3 = con.prepareStatement(sql3);
-
-                pstm3.setInt(1, id_aluguel);
-
-                pstm2.setString(1, "DISPONIVEL");
-                pstm2.setString(2, procurar.placa_aluguel_pelo_id(id_aluguel));
-
-                ps.setInt(1, id_aluguel);
-                ps.setString(2, procurar.placa_aluguel_pelo_id(id_aluguel));
-                ps.setString(3, procurar.nome_aluguel_pelo_id(id_aluguel));
-                ps.setString(4, retorno.getData_retorno().toString());
-                ps.setLong(5, retorno.getAtraso());//fazer o calculo
-                ps.setDouble(6, retorno.getMultaConta());//fazer o calculo
-
-                //Executa query
-                ps.execute();
-                pstm2.execute();
-                pstm3.execute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                //fecha conexoes
-                try {
-                    if (ps != null) {
-                        ps.close();
-                    }
-                    if (pstm2 != null) {
-                        pstm2.close();
-                    }
-                    if (conn != null) {
-                        conn.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.out.println("nao encontrado correspondente");
+            //Executa query
+            ps.execute();
+            pstm2.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
+
     }
 
     public List<Retorno> getRetornos() {

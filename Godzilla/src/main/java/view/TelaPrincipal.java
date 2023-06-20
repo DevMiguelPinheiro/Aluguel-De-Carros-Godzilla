@@ -133,7 +133,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGclientesActionPerformed
 
     private void btnAlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlugarActionPerformed
-        new TaluguelEretorno().setVisible(true);
+        new TelaAlguel().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnAlugarActionPerformed
 
