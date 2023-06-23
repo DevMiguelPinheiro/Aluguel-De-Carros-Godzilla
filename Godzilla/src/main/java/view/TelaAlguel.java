@@ -1,11 +1,9 @@
 package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
-import controller.JcomboBoxController;
+import controller.TabelaCarrosController;
 import factory.ConnectionFactory;
 import java.awt.Image;
-import java.awt.List;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +13,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -27,6 +24,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import model.dao.AlugarDao;
+import model.dao.CRUD;
 import model.dao.Procura_no_banco;
 import model.entities.Aluguel;
 import model.entities.Carros;
@@ -317,11 +315,13 @@ public class TelaAlguel extends javax.swing.JFrame {
     AlugarDao dao = new AlugarDao();
     Carros carro = new Carros();
     Cliente cliente = new Cliente();
-    Procura_no_banco procura = new Procura_no_banco();
+    TabelaCarrosController dao3;
+    dao3 = new TabelaCarrosController();
     String placa = tfCarro.getText();
     String idCliente = tfIdCliente.getText();
     String dataRetorno = tfdataRetorno.getText();
     int idClienteInt = Integer.parseInt(idCliente);
+    
     
     String ncliente = tfNome.getText();
 
@@ -360,7 +360,7 @@ public class TelaAlguel extends javax.swing.JFrame {
 
         // Informar que o PDF foi gerado
         JOptionPane.showMessageDialog(this, "Relatório PDF gerado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            dao.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
+            dao3.atualizarTabelaDisponivel((DefaultTableModel) tabelacarros.getModel());
             tabelacarros.revalidate();
             tabelacarros.repaint();
     } catch (DateTimeParseException e) {

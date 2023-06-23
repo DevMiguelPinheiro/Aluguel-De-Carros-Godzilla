@@ -59,4 +59,66 @@ public class TabelaCarrosController {
 
     }
     
+        public void atualizarTabelaAlugado(DefaultTableModel model) throws SQLException {
+        String query = "SELECT * FROM carros WHERE status = 'ALUGADO'";
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            model.setRowCount(0); // Limpar os dados existentes na tabela
+
+            while (rs.next()) {
+                Object[] rowData = new Object[5]; // Adicionei mais um elemento para o array
+
+                // Preencher o array rowData com os dados do ResultSet
+                rowData[0] = rs.getString("placa");
+                rowData[1] = rs.getString("marca");
+                rowData[2] = rs.getString("modelo");
+                rowData[3] = rs.getString("status");
+                rowData[4] = rs.getDouble("preco");
+                rowData[5] = rs.getString("caminhoimg");
+
+                model.addRow(rowData);
+            }
+
+            rs.close();
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+        }
+
+    }
+        
+            public void atualizarTabelaDisponivel(DefaultTableModel model) throws SQLException {
+        String query = "SELECT * FROM carros WHERE status = 'DISPONIVEL'";
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            model.setRowCount(0); // Limpar os dados existentes na tabela
+
+            while (rs.next()) {
+                Object[] rowData = new Object[5]; // Adicionei mais um elemento para o array
+
+                // Preencher o array rowData com os dados do ResultSet
+                rowData[0] = rs.getString("placa");
+                rowData[1] = rs.getString("marca");
+                rowData[2] = rs.getString("modelo");
+                rowData[3] = rs.getString("status");
+                rowData[4] = rs.getDouble("preco");
+                rowData[5] = rs.getString("caminhoimg");
+
+                model.addRow(rowData);
+            }
+
+            rs.close();
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+        }
+
+    }    
+    
 }
