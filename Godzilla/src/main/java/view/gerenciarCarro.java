@@ -6,6 +6,7 @@ package view;
 
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import controller.TabelaCarrosController;
 import factory.ConnectionFactory;
 import java.sql.ResultSetMetaData;
 import model.entities.Carros;
@@ -345,6 +346,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
         PRECO.setText("");
         MODELO.setText("");
         MARCA.setText("");
+        lblfoto.setText("");
     }//GEN-LAST:event_LIMPAR1ActionPerformed
 
     private void tabelacarrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelacarrosMouseClicked
@@ -389,6 +391,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     Carros carros = new Carros();
     CRUD dao;
     CarrosDao dao2;
+    TabelaCarrosController dao3;
     carros.setPlaca(PLACA.getText());
     carros.setMarca(MARCA.getText());
     carros.setModelo(MODELO.getText());
@@ -396,6 +399,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     String statusSelecionado = (String) cbstatus.getSelectedItem();
     carros.setStatus(statusSelecionado);
     carros.setImagem(tfimg.getText());
+    dao3 = new TabelaCarrosController();
     dao2 = new CarrosDao();
     dao = new CRUD();
 
@@ -409,7 +413,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
             }
 
-            dao2.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
+            dao3.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
             tabelacarros.revalidate();
             tabelacarros.repaint();
         }

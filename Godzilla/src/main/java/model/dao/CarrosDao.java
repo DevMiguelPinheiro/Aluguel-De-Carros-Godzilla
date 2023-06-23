@@ -43,7 +43,7 @@ public class CarrosDao extends Carros {
 
     public List<Carros> getCarros() {
 
-        String sql = "SELECT * FROM listas.carros";
+        String sql = "SELECT * FROM sistemagod.carros";
 
         List<Carros> carros = new ArrayList<Carros>();
 
@@ -78,54 +78,9 @@ public class CarrosDao extends Carros {
         return carros;
     }
 
-//    public boolean salvar(Carros carros) {
-//
-//        try {
-//            String sql = "INSERT INTO carros (placa, marca, modelo,status,preco,caminhoimg) VALUES (?, ?, ?, ?, ?, ?)";
-//            ps = con.prepareStatement(sql);
-//            ps.setString(1, carros.getPlaca());
-//            ps.setString(2, carros.getMarca());
-//            ps.setString(3, carros.getModelo());
-//            ps.setString(4, carros.getStatus());
-//            ps.setDouble(5, carros.getPreco());
-//            ps.setString(6,carros.getImagem());
-//            ps.executeUpdate();
-//            return true;
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//            return false;
-//        }
-//    }
 
-    public void atualizarTabela(DefaultTableModel model) throws SQLException {
-        String query = "SELECT * FROM carros";
-        try {
-            ps = con.prepareStatement(query);
-            rs = ps.executeQuery();
 
-            model.setRowCount(0); // Limpar os dados existentes na tabela
 
-            while (rs.next()) {
-                Object[] rowData = new Object[5]; // Adicionei mais um elemento para o array
-
-                // Preencher o array rowData com os dados do ResultSet
-                rowData[0] = rs.getString("placa");
-                rowData[1] = rs.getString("marca");
-                rowData[2] = rs.getString("modelo");
-                rowData[3] = rs.getString("status");
-                rowData[4] = rs.getDouble("preco");
-
-                model.addRow(rowData);
-            }
-
-            rs.close();
-        } finally {
-            if (ps != null) {
-                ps.close();
-            }
-        }
-
-    }
 
     public boolean excluirCarro(String placa) {
         try {
@@ -143,26 +98,26 @@ public class CarrosDao extends Carros {
         }
     }
 
-//    public boolean editarCarro(String placaAntiga, String novaPlaca, String novaMarca, String novoModelo, double novoValor, String novoStatus) {
-//        try {
-//            String query = "UPDATE carros SET placa = ?, marca = ?, modelo = ?, status = ?, preco = ? WHERE placa = ?";
-//            ps = con.prepareStatement(query);
-//            ps.setString(1, novaPlaca);
-//            ps.setString(2, novaMarca);
-//            ps.setString(3, novoModelo);
-//            ps.setString(4, novoStatus);
-//            ps.setDouble(5, novoValor);
-//            ps.setString(6, placaAntiga);
-//
-//            int rowsAffected = ps.executeUpdate();
-//            ps.close();
-//
-//            return rowsAffected > 0; // Retorna true se pelo menos uma linha foi afetada (atualizada)
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//            return false;
-//        }
-//    }
+    public boolean editarCarro(String placaAntiga, String novaPlaca, String novaMarca, String novoModelo, double novoValor, String novoStatus) {
+        try {
+            String query = "UPDATE carros SET placa = ?, marca = ?, modelo = ?, status = ?, preco = ? WHERE placa = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, novaPlaca);
+            ps.setString(2, novaMarca);
+            ps.setString(3, novoModelo);
+            ps.setString(4, novoStatus);
+            ps.setDouble(5, novoValor);
+            ps.setString(6, placaAntiga);
+
+            int rowsAffected = ps.executeUpdate();
+            ps.close();
+
+            return rowsAffected > 0; // Retorna true se pelo menos uma linha foi afetada (atualizada)
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 
     public void listarCarrosDisponiveis(DefaultListModel<String> model) {
         try {

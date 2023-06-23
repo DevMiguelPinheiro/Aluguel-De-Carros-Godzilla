@@ -22,6 +22,7 @@ public class ConnectionFactory {
 
     public ConnectionFactory() {
     }
+    
     // desconectar
     public static void closeConnection(){
     try {
@@ -59,6 +60,9 @@ public class ConnectionFactory {
             return false;
         }
     }
+    
+    
+    
     //login
     public static boolean login(String usuario, String senha) {
         try {
