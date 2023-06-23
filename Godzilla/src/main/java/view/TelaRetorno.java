@@ -21,9 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import model.dao.AlugarCarroDao;
-import model.dao.CarrosDao;
-import model.entities.Aluguel;
+import model.dao.AlugarDao;
 import model.entities.Retorno;
 
 /**
@@ -35,7 +33,6 @@ public class TelaRetorno extends javax.swing.JFrame {
     /**
      * Creates new form TelaRetorno
      */
-    private CarrosDao carrosDao;
     private DefaultListModel<String> carrosModel;
     private Connection con;
     private Statement st;
@@ -78,22 +75,22 @@ public class TelaRetorno extends javax.swing.JFrame {
             }
         });
         tabelaAluguel.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            if (!e.getValueIsAdjusting()) {
-                int selectedRow = tabelaAluguel.getSelectedRow();
-                if (selectedRow != -1) {
-                    String idAluguel = tabelaAluguel.getValueAt(selectedRow, 0).toString();
-                    tfId.setText(idAluguel);
-                    String nomeCliente = tabelaAluguel.getValueAt(selectedRow, 1).toString();
-                    tfnomecliente.setText(nomeCliente);
-                    String dataEsperada = tabelaAluguel.getValueAt(selectedRow, 4).toString();
-                    tfdataesperada.setText(dataEsperada);
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = tabelaAluguel.getSelectedRow();
+                    if (selectedRow != -1) {
+                        String idAluguel = tabelaAluguel.getValueAt(selectedRow, 0).toString();
+                        tfId.setText(idAluguel);
+                        String nomeCliente = tabelaAluguel.getValueAt(selectedRow, 1).toString();
+                        tfnomecliente.setText(nomeCliente);
+                        String dataEsperada = tabelaAluguel.getValueAt(selectedRow, 4).toString();
+                        tfdataesperada.setText(dataEsperada);
+                    }
                 }
             }
-        }
-    });
-        
+        });
+
     }
 
     /**
@@ -325,15 +322,15 @@ public class TelaRetorno extends javax.swing.JFrame {
 
     private void retornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornoActionPerformed
         Retorno rent = new Retorno();
-        AlugarCarroDao dao = new AlugarCarroDao();
+        AlugarDao dao = new AlugarDao();
         String idAluguel = tfId.getText();
-        int idaluguel  = Integer.parseInt(idAluguel);// converte para inteiro
+        int idaluguel = Integer.parseInt(idAluguel);// converte para inteiro
         String placa = tfPlaca.getText();
         String idCliente = tfIdCliente.getText();
-        int idcliente  = Integer.parseInt(idCliente);// converte para inteiro
+        int idcliente = Integer.parseInt(idCliente);// converte para inteiro
         String nomeCliente = tfnomecliente.getText();
         String valor = tfvalor.getText();
-        
+
         double valorCarro = Double.parseDouble(valor);
         LocalDate dataRetornoAtual = LocalDate.now();
         String dataRetornoAtuall = LocalDate.now().toString();
@@ -346,45 +343,47 @@ public class TelaRetorno extends javax.swing.JFrame {
 
             multaConta = 0.10 * valorCarro;
         }
-        
+
         rent.setId_aluguel(idaluguel);
         rent.setPlaca(placa);
         rent.setNome(nomeCliente);
         rent.setData_retorno(dataRetornoAtual);
         rent.setMultaConta(multaConta);
         rent.setAtraso(atraso);
-        
-        try {
+
         if (!ConnectionFactory.getConnectionb()) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
         } else {
             if (dao.retornarCarro(rent)) {
-            if (multaConta > 0.0) {
-                String mensagem = "O cliente possui uma multa no valor de R$" + multaConta;
-                JOptionPane.showMessageDialog(null, mensagem);
+                if (multaConta > 0.0) {
+                    String mensagem = "O cliente possui uma multa no valor de R$" + multaConta;
+                    
+                    // Mostrar o JOptionPane com as opções
+                    int opcao = JOptionPane.showOptionDialog(null, mensagem, "Cliente com Multa",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                            new String[]{"Sim", "Não"}, "Sim");
+                    
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        // Cliente pagou a multa, inserir os dados na tabela
+                        JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
+                        dao.gerarNotaRetorno(placa, idCliente, dataRetornoAtuall, nomeCliente);
+                    } else {
+                        // Retorno cancelado
+                        JOptionPane.showMessageDialog(null, "Retorno cancelado");
+                    }
+                } else {
+                    // Não há multa, inserir os dados na tabela
+                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
+                    dao.gerarNotaRetorno(placa, idCliente, dataRetornoAtuall, nomeCliente);
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
-                dao.gerarNotaRetorno(placa, idCliente, dataRetornoAtuall, nomeCliente);
-                
+                JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
-        }
-
-            dao.atualizarTabela((DefaultTableModel) tabelacarros.getModel());
-            tabelacarros.revalidate();
-            tabelacarros.repaint();
-            tabelaAluguel.revalidate();
-            tabelaAluguel.repaint();
             
+           
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Erro ao atualizar a tabela de alugueis ");
-    } finally {
         ConnectionFactory.closeConnection();
-    }
-        
+
     }//GEN-LAST:event_retornoActionPerformed
 
     private void tfdataesperadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdataesperadaActionPerformed
@@ -398,22 +397,24 @@ public class TelaRetorno extends javax.swing.JFrame {
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         voltarTelaPrincipal();
     }//GEN-LAST:event_jLabel8MouseClicked
-    
+
     private void preencherInformacoesSelecionadas() {
-    tabelacarros.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            if (!e.getValueIsAdjusting()) {
-                int selectedRow = tabelacarros.getSelectedRow();
-                if (selectedRow != -1) {
-                    String placa = tabelacarros.getValueAt(selectedRow, 0).toString();
-                    tfPlaca.setText(placa);
-                    String valor = tabelacarros.getValueAt(selectedRow,4).toString();
-                    tfvalor.setText(valor);
+        tabelacarros.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = tabelacarros.getSelectedRow();
+                    if (selectedRow != -1) {
+                        String placa = tabelacarros.getValueAt(selectedRow, 0).toString();
+                        tfPlaca.setText(placa);
+                        String valor = tabelacarros.getValueAt(selectedRow, 4).toString();
+                        tfvalor.setText(valor);
+                    }
                 }
             }
-        }
-    });}
+        });
+    }
+
     public void exibirCarros() {
         try {
             con = ConnectionFactory.getConnection();
@@ -492,29 +493,28 @@ public class TelaRetorno extends javax.swing.JFrame {
         // Definir o modelo da JList
         listaClientes.setModel(model);
     }
+
     private void voltarTelaPrincipal() {
-    TelaPrincipal telaPrincipal = new TelaPrincipal();
-    telaPrincipal.setVisible(true);
-    this.dispose(); // Fecha a janela atual
-}
-  
+        TelaPrincipal telaPrincipal = new TelaPrincipal();
+        telaPrincipal.setVisible(true);
+        this.dispose(); // Fecha a janela atual
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         try {
-    UIManager.setLookAndFeel( new FlatDarkPurpleIJTheme());
-    } catch( Exception ex ) {
-    System.err.println( "Failed to initialize LaF" );
-}
+            UIManager.setLookAndFeel(new FlatDarkPurpleIJTheme());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
+        }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TelaRetorno().setVisible(true);
             }
         });
-    
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

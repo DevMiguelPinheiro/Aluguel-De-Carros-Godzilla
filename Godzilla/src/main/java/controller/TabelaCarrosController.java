@@ -45,6 +45,7 @@ public class TabelaCarrosController {
                 rowData[2] = rs.getString("modelo");
                 rowData[3] = rs.getString("status");
                 rowData[4] = rs.getDouble("preco");
+                rowData[5] = rs.getString("caminhoimg");
 
                 model.addRow(rowData);
             }
@@ -57,4 +58,5 @@ public class TabelaCarrosController {
         }
 
     }
+    
 }

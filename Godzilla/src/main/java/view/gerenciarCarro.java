@@ -10,15 +10,8 @@ import controller.TabelaCarrosController;
 import factory.ConnectionFactory;
 import java.sql.ResultSetMetaData;
 import model.entities.Carros;
-import model.dao.CarrosDao;
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -354,6 +347,8 @@ public class gerenciarCarro extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelacarrosMouseClicked
 
     private void EXCLUIRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EXCLUIRActionPerformed
+        CRUD dao;
+        dao = new CRUD() {};
         int selectedRow = tabelacarros.getSelectedRow(); // Obtém a linha selecionada
 
         if (selectedRow != -1) { // Verifica se alguma linha foi selecionada
@@ -362,13 +357,11 @@ public class gerenciarCarro extends javax.swing.JFrame {
             int confirm = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o carro com a placa: " + placa + "?", "Excluir Carro", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) { // Confirmação do usuário
-                CarrosDao dao = new CarrosDao();
-
                 try {
                     if (!ConnectionFactory.getConnectionb()) {
                         JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
                     } else {
-                        if (dao.excluirCarro(placa)) { // Exclui o carro com a placa especificada
+                        if (dao.delete(placa)) { // Exclui o carro com a placa especificada
                             JOptionPane.showMessageDialog(null, "Carro excluído com sucesso!");
                             DefaultTableModel model = (DefaultTableModel) tabelacarros.getModel();
                             model.removeRow(selectedRow); // Remove a linha da tabela
@@ -390,18 +383,16 @@ public class gerenciarCarro extends javax.swing.JFrame {
     private void ADICIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONARActionPerformed
     Carros carros = new Carros();
     CRUD dao;
-    CarrosDao dao2;
     TabelaCarrosController dao3;
     carros.setPlaca(PLACA.getText());
     carros.setMarca(MARCA.getText());
     carros.setModelo(MODELO.getText());
     carros.setPreco(Double.parseDouble(PRECO.getText()));
-    String statusSelecionado = (String) cbstatus.getSelectedItem();
+    String statusSelecionado = "DISPONIVEL";
     carros.setStatus(statusSelecionado);
     carros.setImagem(tfimg.getText());
     dao3 = new TabelaCarrosController();
-    dao2 = new CarrosDao();
-    dao = new CRUD();
+    dao = new CRUD() {};
 
     try {
         if (!ConnectionFactory.getConnectionb()) {
@@ -430,7 +421,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     }//GEN-LAST:event_MODELOActionPerformed
 
     private void SELECIONARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SELECIONARActionPerformed
-    CarrosDao dao = new CarrosDao();
+    CRUD dao = new CRUD() {};
     dao.selecionarImagem(lblfoto,tfimg);
 
     }//GEN-LAST:event_SELECIONARActionPerformed
@@ -452,7 +443,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     }//GEN-LAST:event_lblmenuMouseClicked
     
     private void editarDados() throws SQLException {
-    CRUD dao = new CRUD();
+    CRUD dao = new CRUD() {};
     Carros carro = new Carros();
     int selectedRow = tabelacarros.getSelectedRow();
 
@@ -476,17 +467,6 @@ public class gerenciarCarro extends javax.swing.JFrame {
         }
 
         try {
-
-            
-            
-                // Update the status in the database
-                if (dao.update(carro)) {
-                    JOptionPane.showMessageDialog(null, "Status do carro editado com sucesso!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível editar o status do carro");
-                }
-            
-
             if (dao.update(carro)) {
                 JOptionPane.showMessageDialog(null, "Dados editados com sucesso!");
                 DefaultTableModel model = (DefaultTableModel) tabelacarros.getModel();

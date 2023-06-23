@@ -5,11 +5,11 @@
 package view;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import controller.TabelaClientesController;
 import factory.ConnectionFactory;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -21,9 +21,9 @@ import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import model.dao.ClientesDao;
+import model.dao.CRUD;
 import model.entities.Cliente;
-import model.dao.ClientesDao;
+
 
 
 
@@ -50,9 +50,9 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
         int selectedRow = tabelaCliente.getSelectedRow();
         if (selectedRow != -1) {
-        tfnome.setText(tabelaCliente.getValueAt(selectedRow, 0).toString());
-        tfend.setText(tabelaCliente.getValueAt(selectedRow, 1).toString());
-        tffone.setText(tabelaCliente.getValueAt(selectedRow, 2).toString());
+        tfnome.setText(tabelaCliente.getValueAt(selectedRow, 1).toString());
+        tfend.setText(tabelaCliente.getValueAt(selectedRow, 2).toString());
+        tffone.setText(tabelaCliente.getValueAt(selectedRow, 3).toString());
         
             }
         }
@@ -252,27 +252,26 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
 
     private void ADICIONAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADICIONAR2ActionPerformed
     Cliente clientes = new Cliente();
-    ClientesDao dao;
+    CRUD dao;
+    TabelaClientesController dao2;
     boolean sts;
     clientes.setNome(tfnome.getText());
     clientes.setEndereco(tfend.getText());
     clientes.setTelefone(tffone.getText());
- 
-
-
-    dao = new ClientesDao();
+    dao = new CRUD() {};
+    dao2 = new TabelaClientesController();
 
     try {
         if (!ConnectionFactory.getConnectionb()) {
             JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
         } else {
-            if (dao.salvar(clientes)) {
+            if (dao.save(clientes)) {
                 JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso!");
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível salvar os dados do carro");
             }
 
-            dao.atualizarTabela((DefaultTableModel) tabelaCliente.getModel());
+            dao2.atualizarTabela((DefaultTableModel) tabelaCliente.getModel());
             tabelaCliente.revalidate();
             tabelaCliente.repaint();
         }
@@ -287,17 +286,19 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
 
         if (selectedRow != -1) { // Verifica se alguma linha foi selecionada
             String id = tabelaCliente.getValueAt(selectedRow, 0).toString(); // Obtém o valor da coluna "ID" da linha selecionada
-
+            int idint = Integer.parseInt(id);
             int confirm = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o carro com a id: " + id + "?", "Excluir Carro", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) { // Confirmação do usuário
-                ClientesDao dao = new ClientesDao();
+                CRUD dao = new CRUD() {};
+                Cliente cliente  = new Cliente();
+                cliente.setId_cliente(idint);
 
                 try {
                     if (!ConnectionFactory.getConnectionb()) {
                         JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
                     } else {
-                        if (dao.excluirCliente(id)) { 
+                        if (dao.deleteCliente(cliente)) { 
                             JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso!");
                             DefaultTableModel model = (DefaultTableModel) tabelaCliente.getModel();
                             model.removeRow(selectedRow); // Remove a linha da tabela
@@ -321,7 +322,8 @@ public class gerenciarCliente2 extends javax.swing.JFrame {
     }//GEN-LAST:event_tffoneActionPerformed
 
     private void EDITAR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EDITAR2ActionPerformed
-    ClientesDao dao = new ClientesDao();
+    CRUD dao = new CRUD() {};
+    Cliente cliente  = new Cliente();
     int selectedRow = tabelaCliente.getSelectedRow();
 
 if (selectedRow != -1) {
@@ -329,6 +331,10 @@ if (selectedRow != -1) {
     String novoNome = tfnome.getText();
     String novoEndereco = tfend.getText();
     String novoTelefone = tffone.getText();
+    
+    cliente.setNome(novoNome);
+    cliente.setEndereco(novoEndereco);
+    cliente.setTelefone(novoTelefone);
 
     if (!ConnectionFactory.getConnectionb()) {
         JOptionPane.showMessageDialog(null, "Erro na conexão com o banco de dados");
@@ -336,7 +342,7 @@ if (selectedRow != -1) {
     }
 
     try {
-        if (dao.editarCliente(id, novoNome, novoEndereco, novoTelefone)) {
+        if (dao.update(cliente)) {
             JOptionPane.showMessageDialog(null, "Dados editados com sucesso!");
             DefaultTableModel model = (DefaultTableModel) tabelaCliente.getModel();
             model.setValueAt(novoNome, selectedRow, 1);

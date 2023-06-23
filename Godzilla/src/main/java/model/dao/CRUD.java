@@ -5,11 +5,18 @@
 package model.dao;
 
 import factory.ConnectionFactory;
+import java.awt.Image;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import model.entities.Carros;
 import model.entities.Cliente;
 
@@ -17,7 +24,7 @@ import model.entities.Cliente;
  *
  * @author migue
  */
-public class CRUD {
+public abstract class CRUD implements ClienteInterface,CarrosInterface{
 
     public boolean save(Carros carro) {
         String sql = "INSERT INTO carros(placa, marca, modelo, status, preco,caminhoimg) VALUES(?, ?, ?, ?, ?,?)";
@@ -38,7 +45,7 @@ public class CRUD {
             pstm.setString(3, carro.getModelo());
             pstm.setString(4, carro.getStatus());
             pstm.setDouble(5, carro.getPreco());
-            pstm.setString(6,carro.getImagem());
+            pstm.setString(6, carro.getImagem());
 
             //Executa query
             pstm.execute();
@@ -124,7 +131,7 @@ public class CRUD {
     //editar
     public boolean update(Carros carro) {
 
-        String sql = "UPDATE carros SET marca = ?, modelo = ?, status = ?, preco = ?, caminhoimg = ? "
+        String sql = "UPDATE carros SET marca = ?, modelo = ?, preco = ?, caminhoimg = ? "
                 + "WHERE placa = ?";
 
         Connection conn = null;
@@ -141,13 +148,11 @@ public class CRUD {
             //adicionar os valores para atualizar
             pstm.setString(1, carro.getMarca());
             pstm.setString(2, carro.getModelo());
-            pstm.setString(3, carro.getStatus());
-            pstm.setDouble(4, carro.getPreco());
-            pstm.setString(6,carro.getImagem());
+            pstm.setDouble(3, carro.getPreco());
+            pstm.setString(4, carro.getImagem());
 
             //qual id pra atualizar
             pstm.setString(5, carro.getPlaca());
-            
 
             //executar
             pstm.execute();
@@ -205,6 +210,28 @@ public class CRUD {
             }
         }
 
+    }
+
+    public void selecionarImagem(JLabel lblfoto, JTextField tfimg) {
+        JFileChooser arquivo = new JFileChooser();
+        arquivo.setDialogTitle("Selecione uma imagem");
+        arquivo.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagens", "jpg", "jpeg", "png", "gif");
+        arquivo.setFileFilter(filter);
+
+        int op = arquivo.showOpenDialog(null);
+        if (op == JFileChooser.APPROVE_OPTION) {
+            File file = arquivo.getSelectedFile();
+            String caminho = file.getAbsolutePath();
+
+            // Armazena o caminho da imagem no JTextField tfimg
+            tfimg.setText(caminho);
+
+            ImageIcon imagem = new ImageIcon(file.getPath());
+            Image img = imagem.getImage().getScaledInstance(lblfoto.getWidth(), lblfoto.getHeight(), Image.SCALE_DEFAULT);
+            ImageIcon imagemRedimensionada = new ImageIcon(img);
+            lblfoto.setIcon(imagemRedimensionada);
+        }
     }
 
     //parte do cliente
@@ -349,7 +376,7 @@ public class CRUD {
         }
     }
 
-    public boolean delete(Carros carro) {
+    public boolean deleteCliente(Cliente cliente) {
 
         String sql = "DELETE FROM clientes WHERE id = ?";
 
@@ -364,7 +391,7 @@ public class CRUD {
             //criar a classe para executar a query
             pstm = (PreparedStatement) conn.prepareStatement(sql);
 
-            pstm.setString(1, carro.getPlaca());
+            pstm.setInt(1, cliente.getId_cliente());
 
             pstm.execute();
             return true;

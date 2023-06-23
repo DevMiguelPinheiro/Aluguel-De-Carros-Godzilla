@@ -26,8 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import model.dao.AlugarCarroDao;
-import model.dao.CarrosDao;
+import model.dao.AlugarDao;
 import model.dao.Procura_no_banco;
 import model.entities.Aluguel;
 import model.entities.Carros;
@@ -48,7 +47,6 @@ public class TelaAlguel extends javax.swing.JFrame {
     /**
      * Creates new form TelaAlguel
      */
-    private CarrosDao carrosDao;
     private DefaultListModel<String> carrosModel;
     private Connection con;
     private Statement st;
@@ -57,7 +55,6 @@ public class TelaAlguel extends javax.swing.JFrame {
 
     public TelaAlguel() {
         initComponents();
-        carrosDao = new CarrosDao();
         carrosModel = new DefaultListModel<>();
         Aluguel aluguel = new Aluguel();
         exibirCarros();
@@ -317,7 +314,7 @@ public class TelaAlguel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void alugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alugarActionPerformed
-    AlugarCarroDao dao = new AlugarCarroDao();
+    AlugarDao dao = new AlugarDao();
     Carros carro = new Carros();
     Cliente cliente = new Cliente();
     Procura_no_banco procura = new Procura_no_banco();

@@ -21,29 +21,23 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import model.entities.Aluguel;
-import model.entities.Carros;
-import model.entities.Cliente;
 import model.entities.Retorno;
 
 /**
  *
  * @author migue
  */
-public class AlugarCarroDao extends Aluguel {
+public class AlugarDao extends Aluguel {
 
     private Connection con;
     private PreparedStatement ps;
+    private PreparedStatement ps2;
     private ResultSet rs;
     ConnectionFactory connectionFactory = new ConnectionFactory();
 
-    public AlugarCarroDao() {
+    public AlugarDao() {
         con = connectionFactory.getConnection();
     }
 
@@ -156,18 +150,17 @@ public class AlugarCarroDao extends Aluguel {
 
     public boolean retornarCarro(Retorno rent) {
 
-        PreparedStatement pstm2 = null;
         try {
             String sql = "INSERT INTO retorno(id_aluguel, placa, nome, data_retorno, atraso,multaConta) VALUES(?, ?, ?, ?, ?, ?)";
             String sql2 = "UPDATE carros SET status = ?"
                     + "WHERE placa = ?";
             //cria uma PreparedStatement para executar uma query
             ps = (PreparedStatement) con.prepareStatement(sql);
-            pstm2 = con.prepareStatement(sql2);
+            ps2 = con.prepareStatement(sql2);
             
            
-            pstm2.setString(1, "ALUGADO");
-            pstm2.setString(2, rent.getPlaca());
+            ps2.setString(1, "DISPONIVEL");
+            ps2.setString(2, rent.getPlaca());
             
            
             ps.setInt(1, rent.getId_aluguel());
@@ -179,7 +172,7 @@ public class AlugarCarroDao extends Aluguel {
 
             //Executa query
             ps.execute();
-            pstm2.execute();
+            ps2.execute();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
