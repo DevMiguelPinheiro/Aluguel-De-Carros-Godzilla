@@ -547,7 +547,7 @@ public class gerenciarCarro extends javax.swing.JFrame {
     UIManager.setLookAndFeel( new FlatDarkPurpleIJTheme());
     } catch( Exception ex ) {
     System.err.println( "Failed to initialize LaF" );
-}
+    }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new gerenciarCarro().setVisible(true);

@@ -41,7 +41,7 @@ public class ConnectionFactory {
        
         try { 
             Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bancotal","root", "");
             return con;
         }  catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
@@ -53,7 +53,7 @@ public class ConnectionFactory {
     public static boolean getConnectionb(){    
         try { 
             Class.forName("com.mysql.cj.jdbc.Driver");//indica driver
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemagod","root", "1234");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bancotal","root", "");
             return true;
         }  catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
